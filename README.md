@@ -29,3 +29,19 @@ After creating a clip, you need to reference it in the clips.js file - open this
 
 Specify your clip like this: [directory name,number of frames,pixel width,pixel height] Note that the last clip array shouldn't have a comma after it. Everything will work as designed if all frames in your clip have the same dimensions. Later you'll be able to mix frames from different clips to create new sequences.
 
+### Sequences
+
+Where a clip is a sequence of frames, typically extracted from an existing video file (could also be generated), a 'sequence' is what the Slide Machine actually plays. On loading, all clips are included as sequences. Soon I'll be adding tools to allow you to edit together new sequences, grab individual frames from clips, etc.
+
+### Layers
+
+All of the visuals are composed of layered images with different opacities. Initially, there is only one layer, numbered 0, but layers can be added/removed on the fly.
+
+### Layer Properties
+
+Layers have properties relating to playback (e.g. normal, reverse, random) and effects (e.g. opacity, zoom, orientation)
+
+### A Tour of the UI
+
+
+
