@@ -79,11 +79,11 @@ Up arrow will move up to higher layers (if any), down arrow will move to lower l
 
 Set properties of currently selected layer. This includes which sequence is loaded into this layer, how the sequence should be played, effects such as zoom and opacity, and special effects to be applied to the layer.
 
-#### Mode > This Layer > Sequence
+#### Mode > This Layer > Sequence >
 
 Select which sequence should be loaded into this layer.
 
-#### Mode > This Layer > Playback Settings
+#### Mode > This Layer > Playback Settings >
 
 These settings relate to how the sequence is played back:
 
@@ -114,6 +114,74 @@ Random frame chosen each time.
 #### Mode > This Layer > Playback Settings > Playback Mode > Loop Repeat
 
 Marked section will play in a loop. Loop start and end points are created by pressing **\[** for start loop point and **\]** for end loop point. Press **\=** to clear loop points for this layer. If no loop points are set, beginning and end of sequence will be treated as start and end points.
+
+#### Mode > This Layer > Playback Settings > Playback Mode > Loop Bounce
+
+As above, but instead of repeating, the playback direction reverses at each end of the loop.
+
+#### Mode > This Layer > Playback Settings > Playback Pattern
+
+The Playback Pattern only affects playback when in **Normal** playback mode. This field takes comma-separated integers specifying how many frames to advance (and in which direction) each time the frame advances. For instance, entering a pattern like this:
+
+````
+1,1,1,1,-1,-1,-1
+````
+
+Will playback in this sequence: Forward 1 frame, Forward 1 frame, Forward 1 frame, Forward 1 frame, Backward 1 frame, Backward 1 frame, Backward 1 frame. When following this pattern, the effect will be a sort of "loopy" cycle back and forth, but slowly shifting forward.
+
+#### Mode > This Layer > Effects >
+
+All of the Effects can take either a single integer or a comma-separated series. If there are a series of values, the next value for that particular effect will be set when the sequence advances.
+
+#### Mode > This Layer > Effects > Zoom
+
+Each layer is automatically scaled up to fit in the available window based on the frame dimensions. Zoom defaults to 100 (100%) - can be set to any value from 1 up.
+
+#### Mode > This Layer > Effects > Zoom
+
+Each layer is automatically scaled up to fit in the available window based on the frame dimensions. Zoom defaults to 100 (100%) - can be set to any value from 1 up.
+
+#### Mode > This Layer > Effects > Opacity
+
+Opacity defaults to 100 (100%) - can be set to any value from 0 up.
+
+#### Mode > This Layer > Effects > Shift-X
+
+Amount to shift layer horizontally, from -100 (outside window to the left) to 0 (default - center of window) to 100 (outside window to the right).
+
+#### Mode > This Layer > Effects > Shift-Y
+
+Amount to shift layer horizontally, from -100 (outside window to the top) to 0 (default - center of window) to 100 (outside window to the bottom).
+
+#### Mode > This Layer > Special Effects >
+
+The special effects create copies of the current layer to create these effects. These layers are then marked internally as "linked" to the current layer. If a new special effect is applied, all the linked layers will be first removed. The special effect can also be removed by going to **Mode > Layer Control > Delete Current Linked Layers**.
+
+#### Mode > This Layer > Special Effects > Transreflect Horizontal
+
+Mirrors the current layer horizontally and applies 50% opacity to the second layer so the two layers blend.
+
+#### Mode > This Layer > Special Effects > Transreflect Vertical
+
+Mirrors the current layer Vertically and applies 50% opacity to the second layer so the two layers blend.
+
+#### Mode > This Layer > Special Effects > Transreflect Horiz and Vert
+
+Mirrors the current layer Vertically and Horizontally and balances opacity on linked layers so all blend.
+
+#### Mode > This Layer > Special Effects > Trails (#, Distance)
+
+Takes two integer values separated by a comma, one for number, one for distance. This creates duplicate copies of the current layer, distance then determines how much each new linked layer will be advanced, creating a kind of ghosting "trails" effect.
+
+Then all linked layers have their opacities balanced to blend.
+
+Note that this special effect works best applied after other changes. If you have this special effect applied and then change sequence for instance, the special effect can be disrupted and should be reapplied.
+
+
+
+
+
+
 
 
 
