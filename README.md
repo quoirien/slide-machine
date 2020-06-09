@@ -210,7 +210,39 @@ All controls not related to layers directly are within Global.
 
 Reset all to basic state - one layer with no sequence chosen, all playback normal, etc.
 
+#### Mode > Global > States >
 
+A 'State' is the current state of the layers. The layers and their properties are stored in the state, but the beat is not saved.
+
+#### Mode > Global > States > Save State
+
+Enter name for current state to be able to recall it later.
+
+#### Mode > Global > States > Load State
+
+Load previously saved state. Note that when a state is loaded, the current state is by default saved "to one side" so when the loaded state is unloaded, the previous state is returned to.
+
+#### Mode > Global > States > Unload State
+
+Unload currently loaded state and restore previous state
+
+#### Mode > Global > States > New State Sequence
+
+A state sequence is a sequence of states (really). The idea here is that you can build a number of states, potentially changing each a bit and saving as a new state so there is a natural transition, or just storing a number of unrelated states, then you can put them together into a sequence which can be stepped through in rhythm to the beat or can be manually advanced.
+
+To create a new state sequence, just input any name and press Enter. After creating, you have an empty state sequence. In order to add states to it, you need to initiate it by choosing **Play State Sequence Loop** (see below). When this state sequence is playing, you will be able to select options to add states to it (see below).
+
+#### Mode > Global > States > Set State Sequence Rate
+
+This is the rate the state sequence will be stepped through. The field takes an integer. 1 is the fastest, to advance to next state each cycle. 2 is half that speed, and so on. Default is 24.
+
+#### Mode > Global > States > Play State Sequence Once >
+
+Choose from your previously saved state sequences. This will play the selected state sequence through once, and then restore the previous state of your layers.
+
+#### Mode > Global > States > Play State Sequence Loop >
+
+This will play through the selected state sequence and loop infinitely (until **Unload State** or **Reset** are executed).
 
 
 
