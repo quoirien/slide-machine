@@ -1,8 +1,31 @@
 # slide-machine
-projectile psychotronics
+(projectile psychotronics)
 
-This project is a simple in-browser environment to manage building psychotronic visuals (mainly intended for projection in live performance settings) on the fly.
+## What it is
+Simple in-browser environment to manage building psychotronic visuals (mainly intended for projection in live performance settings) on the fly.
 
-To use, just open the index.html file in your browser of choice. I have good results with Chrome. I suspect for best performance, it would be good to run as little concurrently as possible, e.g. in Windows run in Safe Mode.
+## Installation
 
-Documentation coming soon (ish).
+Download the files wherever you like. Open the index.html file in your browser of choice.
+
+## How to Use
+
+### Clips
+
+Clips are the basic building block of the Slide Machine. Each clip is composed of a series of 'frames' (browser-displayable images). Within the **clips** directory are subdirectories - each of these contains the files for that clip. The files must be named as a number with leading zeros + ".jpg". Don't worry about it if they **aren't** jpegs, the browser won't care. This is at least true of bitmap formats, I haven't experimented with svg files or anything as yet. So, for instance, if a given clip has 20 frames, they should be named 01.jpg, 02.jpg, ... 20.jpg. If a clip has 800 frames, 001.jpg, 002.jpg etc.
+
+#### Creating Clips
+
+There are any number of ways to create clips. My methodology is to find an interesting visual sequence in a movie, [open in VLC and set up to export as frames](https://www.google.com/search?q=export+individual+frames+from+vlc). Jamie thinks [Macroplant Adapter](https://macroplant.com/adapter) looks good for this purpose. VLC can be iffy depending on encoding. I've had experience with it choking on some files, spitting out multiple copies of the same frame etc. Whatever you use, you might want to export only every 2nd or 3rd frame as the Slide Machine generally doesn't play back at anything like 25fps.
+
+After creating a clip, you need to reference it in the clips.js file - open this file in a text editor and add to the end of it like so:
+
+  ["some_other_clip",382,1024,568]
+  ];
+  
+  ["some_other_clip",382,1024,568],
+  ["my_new_clip",201,600,300]
+  ];
+
+Specify your clip like this: [directory name,number of frames,pixel width,pixel height] Note that the last clip array shouldn't have a comma after it. Everything will work as designed if all frames in your clip have the same dimensions. Later you'll be able to mix frames from different clips to create new sequences.
+
