@@ -55,23 +55,27 @@ Control navigation is set up from left to right, and we'll go through it in orde
 
 Any menu item with options or submenus has a **>** to the right.
 
-## Key Shortcuts
+#### Key Shortcuts
 
 Because it can take time to navigate through the controls, you can create key shortcuts. When you have a control option active, start typing in letters or numbers. You'll see them appear on the lower right. To create the shortcut, hold shift and press Enter. The shortcut will appear in parentheses after the control option. To clear an existing shortcut on the currently active control option, don't type anything, just hold shift and press Enter.
 
 To use a key shortcut, start typing letters/numbers - you'll see them appear in the lower right of the screen. Then press Enter and if there is a defined key shortcut for that string, that control option will become active.
 
-## Layer Selector
+#### Layer Selector
 
 The first control is the Layer Selector, which looks like this: [0]
 
 Up arrow will move up to higher layers (if any), down arrow will move to lower layers.
 
-## Mode >
+  Mode >
 
-## Mode > This Layer
+  Mode > This Layer >
 
-Here we are controlling all the properties of the currently selected layer. This includes which sequence is loaded into this layer, how the sequence should be played, effects such as zoom and opacity, and special effects to be applied to the layer
+Set properties of currently selected layer. This includes which sequence is loaded into this layer, how the sequence should be played, effects such as zoom and opacity, and special effects to be applied to the layer.
 
-## Mode > This Layer > 
+## Mode > This Layer > Sequence
+
+Select which sequence should be loaded into this layer.
+
+
 
