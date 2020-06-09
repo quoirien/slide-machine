@@ -4,6 +4,9 @@
 ## What it is
 Simple in-browser environment to manage building psychotronic visuals (mainly intended for projection in live performance settings) on the fly.
 
+## The Name
+It's named after the [13th Floor Elevators song "Slide Machine"]().
+
 ## License
 
 Haven't figured out specific license to use yet but my intention is that it be considered public domain, (k) all rights reversed, all propriety waived.
@@ -242,7 +245,15 @@ Choose from your previously saved state sequences. This will play the selected s
 
 #### Mode > Global > States > Play State Sequence Loop >
 
-This will play through the selected state sequence and loop infinitely (until **Unload State** or **Reset** are executed).
+This will play through the selected state sequence and loop infinitely (until either **Unload State** or **Reset** is executed). This is the option that should be selected if you are working on adding states to an existing state sequence. Note that when you add a state, it will be added to the end (not in the position of the currently loaded state).
+
+#### Mode > Global > States > Play State Sequence Manual Advance >
+
+This option plays the state sequence selected, but will only advance to the next state in the sequence when space bar is pressed.
+
+#### Mode > Global > States > Add State to Currently Selected Sequence >
+
+Select a state to add to the currently playing state sequence. Note that it will be added to the end (not in the position of the currently loaded state).
 
 
 
