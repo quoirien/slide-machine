@@ -4,6 +4,10 @@
 ## What it is
 Simple in-browser environment to manage building psychotronic visuals (mainly intended for projection in live performance settings) on the fly.
 
+## License
+
+Haven't figured out specific license to use yet but my intention is that it be considered public domain, (k) all rights reversed, all propriety waived.
+
 ## Installation
 
 Download the files wherever you like. Open the index.html file in your browser of choice.
@@ -41,7 +45,33 @@ All of the visuals are composed of layered images with different opacities. Init
 
 Layers have properties relating to playback (e.g. normal, reverse, random) and effects (e.g. opacity, zoom, orientation)
 
-### A Tour of the UI
+### UI
 
+The idea of the UI is that all controls are handled via a single line at the bottom of the screen; this way you can see what you're doing while making live changes but the controls display is pretty unobtrusive where it's being projected (if projecting on a screen you can set up so controls are off screen)
 
+Note that when you launch the Slide Machine, you will need to make sure you have focus on the window so keypresses can be captured. The cursor (mouse pointer) is hidden on the main part of the screen but click there anyhow to make sure you have focus.
+
+Control navigation is set up from left to right, and we'll go through it in order from left to right. The arrow keys are used to navigate through menus. Essentially this is like a tree with the root on the left. So left arrow brings you "down" the tree, right arrow "up" the tree, and up and down arrows change which option or branch (submenu) you select. Enter executes the option. If there is an input, right arrow moves focus into the input. If editing text in an input, the arrow keys will no longer navigate the menus (because arrow keys are used to move around in the text) - to get back to navigating through the menus, click **Esc**.
+
+Any menu item with options or submenus has a **>** to the right.
+
+## Key Shortcuts
+
+Because it can take time to navigate through the controls, you can create key shortcuts. When you have a control option active, start typing in letters or numbers. You'll see them appear on the lower right. To create the shortcut, hold shift and press Enter. The shortcut will appear in parentheses after the control option. To clear an existing shortcut on the currently active control option, don't type anything, just hold shift and press Enter.
+
+To use a key shortcut, start typing letters/numbers - you'll see them appear in the lower right of the screen. Then press Enter and if there is a defined key shortcut for that string, that control option will become active.
+
+## Layer Selector
+
+The first control is the Layer Selector, which looks like this: [0]
+
+Up arrow will move up to higher layers (if any), down arrow will move to lower layers.
+
+## Mode >
+
+## Mode > This Layer
+
+Here we are controlling all the properties of the currently selected layer. This includes which sequence is loaded into this layer, how the sequence should be played, effects such as zoom and opacity, and special effects to be applied to the layer
+
+## Mode > This Layer > 
 
