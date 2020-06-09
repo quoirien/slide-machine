@@ -186,9 +186,29 @@ Then all linked layers have their opacities balanced to blend.
 
 Note that this special effect works best applied after other changes. If you have this special effect applied and then change sequence for instance, the special effect can be disrupted and should be reapplied.
 
+#### Mode > Layer Control > Delete Current Layer
 
+Self-evident.
 
+#### Mode > Layer Control > Delete Current Linked Layers
 
+Deletes all linked layers in the group of current layer - but retains the original layer. Basically, this removes any Special Effects applied as described above.
+
+#### Mode > Layer Control > Insert Blank Layer Above Current
+
+Inserts blank layer above current and selects that layer so you are immediately ready to assign sequence to that layer, etc.
+
+#### Mode > Layer Control > Insert Blank Layer Below Current
+
+Inserts blank layer below current and selects that layer so you are immediately ready to assign sequence to that layer, etc.
+
+#### Mode > Global >
+
+All controls not related to layers directly are within Global.
+
+#### Mode > Global > Reset
+
+Reset all to basic state - one layer with no sequence chosen, all playback normal, etc.
 
 
 
