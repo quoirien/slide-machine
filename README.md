@@ -121,21 +121,17 @@ As above, but instead of repeating, the playback direction reverses at each end 
 
 #### Mode > This Layer > Playback Settings > Playback Pattern
 
-The Playback Pattern only affects playback when in **Normal** playback mode. This field takes comma-separated integers specifying how many frames to advance (and in which direction) each time the frame advances. For instance, entering a pattern like this:
+The Playback Pattern only affects playback when in **Normal** playback mode. This field takes comma-separated integers specifying how many frames to advance (and in which direction) each time the frame advances. For instance, entering a pattern like this
 
 ````
 1,1,1,1,-1,-1,-1
 ````
 
-Will playback in this sequence: Forward 1 frame, Forward 1 frame, Forward 1 frame, Forward 1 frame, Backward 1 frame, Backward 1 frame, Backward 1 frame. When following this pattern, the effect will be a sort of "loopy" cycle back and forth, but slowly shifting forward.
+will play back in this sequence: Forward 1 frame, Forward 1 frame, Forward 1 frame, Forward 1 frame, Backward 1 frame, Backward 1 frame, Backward 1 frame. When following this pattern, the effect will be a sort of "loopy" cycle back and forth, but slowly shifting forward.
 
 #### Mode > This Layer > Effects >
 
 All of the Effects can take either a single integer or a comma-separated series. If there are a series of values, the next value for that particular effect will be set when the sequence advances.
-
-#### Mode > This Layer > Effects > Zoom
-
-Each layer is automatically scaled up to fit in the available window based on the frame dimensions. Zoom defaults to 100 (100%) - can be set to any value from 1 up.
 
 #### Mode > This Layer > Effects > Zoom
 
@@ -152,6 +148,19 @@ Amount to shift layer horizontally, from -100 (outside window to the left) to 0 
 #### Mode > This Layer > Effects > Shift-Y
 
 Amount to shift layer horizontally, from -100 (outside window to the top) to 0 (default - center of window) to 100 (outside window to the bottom).
+
+#### Mode > This Layer > Effects > Flash
+
+Defaults to 1. Takes a series of one or more 1s or 0s such that where there is a 1 the layer will be visible, where there is a 0, the layer will be invisible. This effect can be applied in combination with more complicated opacity changes. For instance, a sequence like this
+
+````
+1,1,1,1,1,1,1,1,1,1,1,0,0
+````
+will have the effect of intermittently flashing a glimpse of layers below the current one.
+
+#### Mode > This Layer > Effects > Orientation >
+
+This effect does not take multiple values. Select an option (all are self-evident): **Normal, Flip X, Flip Y, Flip Both**
 
 #### Mode > This Layer > Special Effects >
 
