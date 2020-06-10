@@ -13,7 +13,7 @@ Haven't figured out specific license to use yet but my intention is that it be c
 
 ## Installation
 
-Download the files wherever you like. Open the index.html file in your browser of choice.
+Download the files wherever you like. To launch, open the index.html file in your browser of choice.
 
 ## How to Use
 
