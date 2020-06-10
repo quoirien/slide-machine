@@ -15,6 +15,15 @@ Haven't figured out specific license to use yet but my intention is that it be c
 
 Download the files wherever you like. To launch, open the index.html file in your browser of choice.
 
+## Upcoming Features
+
+A few things I'm planning to add soon:
+- ability to "record" from currently playing sequence to a buffer in order to be able to build new sequences from bits of other sequences
+- ability to record individual frames as above
+- ability to record the actual screen as it appears and store as a special sequence
+- pre-made complex effects; for instance, zoom + shift patterns, wiggle patterns, slow fade in and out of opacity, etc.
+- ability for the user to name and save effects or groups of effects
+
 ## How to Use
 
 ### Clips
@@ -255,6 +264,9 @@ This option plays the state sequence selected, but will only advance to the next
 
 Select a state to add to the currently playing state sequence. Note that it will be added to the end (not in the position of the currently loaded state).
 
+#### Mode > Global > Export
+
+Used to export all saved states, sequences, state sequences, and key shortcuts. This will pop up a textarea with selected text. Copy using ctrl-C/command-C on most platforms, then open saved.js file in a text editor, replace contents with pasted text and save the file. Next time you open the Slide Machine this file will be read from and used to preserve all of your saved data. 
 
 
 
