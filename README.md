@@ -268,6 +268,8 @@ Select a state to add to the currently playing state sequence. Note that it will
 
 Used to export all saved states, sequences, state sequences, and key shortcuts. This will pop up a textarea with selected text. Copy using ctrl-C/command-C on most platforms, then open saved.js file in a text editor, replace contents with pasted text and save the file. Next time you open the Slide Machine this file will be read from and used to preserve all of your saved data. 
 
+To hide the export textarea, click on it.
+
 
 
 
