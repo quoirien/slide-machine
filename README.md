@@ -5,7 +5,7 @@
 Simple in-browser environment to manage building psychotronic visuals (mainly intended for projection in live performance settings) on the fly.
 
 ## The Name
-It's named after the [13th Floor Elevators song "Slide Machine"]().
+It's named after the [13th Floor Elevators song "Slide Machine"](https://www.youtube.com/watch?v=0Dh4oc0Pj8k).
 
 ## License
 
