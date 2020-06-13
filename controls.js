@@ -496,7 +496,8 @@ function init_controls() {
                   "fun":function(v) {
                     v = parseInt(v);
                     save_state_for_restore();
-
+                    global_playback_mode = "normal";
+                    $("#layer_selector").removeClass("hideme");
                     load_state(v);
                     /* $("#container").html("");
                     $("#container").html(states[v]["html"]);
@@ -524,10 +525,10 @@ function init_controls() {
                   }()
                 },
                 {
-                  "label":"Clear State",
-                  "id":"clear_state",
+                  "label":"Unload State",
+                  "id":"unload_state",
                   "fun":function(v) {
-                    clear_state();
+                    unload_state();
                   }
                 },
                 {
@@ -583,6 +584,7 @@ function init_controls() {
                   "id":"play_state_sequence_loop",
                   "fun":function(v) {
                     save_state_for_restore();
+                    $("#layer_selector").addClass("hideme");
                     current_state_sequence = v;
                     state_sequence_position = 0;
                     global_playback_mode = "state_sequence_loop";
@@ -630,6 +632,7 @@ function init_controls() {
                   "label":"Add State to Current State Sequence",
                   "id":"add_state_to_current",
                   "fun":function(v) {
+                    console.log("should be adding " + v + " to " + current_state_sequence);
                     if(current_state_sequence > -1) {
                       state_sequences[current_state_sequence]["states"].push(v);
                     }
@@ -645,6 +648,64 @@ function init_controls() {
                     }
                     return ret;
                   }()
+                }
+              ]
+            },
+            {
+              "label":"Buffer",
+              "id":"buffer",
+              "subs":[
+                {
+                  "label":"Start/Stop Recording",
+                  "id":"start_stop_recording",
+                  "fun":function() {
+                    recording = recording ? false : true;
+                    if(recording) {$("#rec").addClass("recording");} else {$("#rec").removeClass("recording");}
+                    if(!recording) {
+                      console.log(JSON.stringify(buffer));
+                    }
+                  }
+                },
+                {
+                  "label":"Save Buffer to New Sequence",
+                  "id":"save_buffer_to_new_sequence",
+                  "input":"input",
+                  "fun":function(v) {
+                    var my_sequence = new Sequence(v);
+                    my_sequence.frames_length = buffer.length;
+                    my_sequence.frames = buffer.slice(0);
+                    console.log(JSON.stringify(my_sequence));
+                    sequences.push(my_sequence);
+                    init_controls();
+                    return;
+                  }
+                },
+                {
+                  "label":"Append Buffer to Existing Sequence",
+                  "id":"append_buffer_to_existing_sequence",
+                  "subs":function() {
+                    var ret = [];
+                    for(var ind in sequences) {
+                      ret.push({
+                        "label":sequences[ind]["name"],
+                        "id":"sequence-" + ind,
+                        "linked_layer_property":["sequence_index"],
+                        "value":ind
+                      });
+                    }
+                    return ret;
+                  }(),
+                  "fun":function(v) {
+                    sequences[v].frames = sequences[v].frames.concat(buffer);
+                  }
+                },
+                {
+                  "label":"Clear Buffer",
+                  "id":"clear_buffer",
+                  "fun":function() {
+                    recording = false;
+                    buffer = [];
+                  }
                 }
               ]
             }
