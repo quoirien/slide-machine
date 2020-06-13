@@ -6,6 +6,8 @@ var sequences = [];
 var states = [];
 var state_sequences = [];
 var layers = [];
+var recording = false;
+var buffer = [];
 
 var restore_state = {
   "layers":[],
@@ -14,7 +16,7 @@ var restore_state = {
 
 var paused = false;
 var current_state_sequence = -1;
-var state_sequence_rate = 32;
+var state_sequence_rate = 4;
 var state_sequence_position = 0;
 var global_playback_mode = "normal";
 
@@ -130,6 +132,13 @@ class Layer {
       if(this.playback_pattern && this.playback_pattern.length > 0 && my_mode == "normal") {
         my_mode = "pattern";
       }
+
+      if(this.sequence.name.indexOf("witch") != -1) {
+        console.log("witch");
+        console.log(this.sequence.frames.length);
+        console.log(this.playback_mode);
+        console.log(my_mode);
+      }
       switch(my_mode) {
         case "normal":
           this.frame_index += this.frame_advance;
@@ -197,6 +206,10 @@ class Layer {
     var my_frame = this.sequence.frames[this.frame_index];
     if(typeof my_frame === "undefined") {
       console.log("undefined frame " + this.frame_index);
+    } else {
+      if(recording && layer_index == current_layer()) {
+        buffer.push(my_frame);
+      }
     }
     for(var n in this.effects) {
       if((typeof this.effects[n] !== "string") && (this.effects[n].length > 1)) {
@@ -234,7 +247,7 @@ class Layer {
       this.dims = this.sequence.frames[this.frame_index]["dims"];
 
       //shift should be a percentage of the current container size
-      var working_shift = [Math.floor((this.effects.shift_x[0] / 100) * ($("#container").width() / 2)),Math.floor((this.effects.shift_y[0] / 100) * ($("#container").height() / 2))];
+      var working_shift = [Math.floor((this.effects.shift_x[0] / 100) * ($("#container").width())),Math.floor((this.effects.shift_y[0] / 100) * ($("#container").height()))];
 
       var container_dims = [$("#container").width(),$("#container").height()];
       var scales = [container_dims[0]/this.dims[0],container_dims[1]/this.dims[1]];
@@ -379,19 +392,23 @@ function pad(n,p) {
 function build_sequences_from_clips() {
   for(var n in all_clips) {
     var clip_name = all_clips[n][0];
-    var length_in_frames = all_clips[n][1];
-    var my_sequence = new Sequence(clip_name);
-    var my_dims = [all_clips[n][2],all_clips[n][3]];
-    var pad_amount = ("" + length_in_frames).length;
-    for(var i = 1; i <= all_clips[n][1]; i++) {
-      my_sequence.add_frame(clip_name,pad(i,pad_amount),my_dims);
+    var need_to_add = true;
+    for(var x in sequences) {
+      if(sequences[x]["name"] == clip_name) {
+        need_to_add = false;
+      }
     }
-    sequences.push(my_sequence);
+    if(need_to_add) {
+      var length_in_frames = all_clips[n][1];
+      var my_sequence = new Sequence(clip_name);
+      var my_dims = [all_clips[n][2],all_clips[n][3]];
+      var pad_amount = ("" + length_in_frames).length;
+      for(var i = 1; i <= all_clips[n][1]; i++) {
+        my_sequence.add_frame(clip_name,pad(i,pad_amount),my_dims);
+      }
+      sequences.push(my_sequence);
+    }
   }
-
-  /* sequences[0]["frames"] = compress_frame_sequence(sequences[0]["frames"]);
-  console.log("Compressed sequence: " + JSON.stringify(sequences[0]["frames"]));
-  sequences[0]["frames"] = decompress_frame_sequence(sequences[0]["frames"]); */
 }
 
 var controls_timeout;
@@ -423,7 +440,7 @@ function add_to_key_buffer(char) {
 
 var in_input = false;
 var reserved_keys = [32,37,38,39,40,13,16,80,27,219,221,189,187];
-var instant_keys = [32,219,221,189,187];
+var instant_keys = [32,80,219,221,189,187];
 var bad_char_test = RegExp("[^a-z0-9]");
 
 function handle_keypress(key_code,shifted = false) {
@@ -881,21 +898,23 @@ function do_cycle() {
         layers[i].advance_frame();
       }
     }
+    if(global_playback_mode == "state_sequence_loop") {
+      console.log("SSL");
+    }
     if(((global_playback_mode == "state_sequence_once") || (global_playback_mode == "state_sequence_loop")) && (cycle_counter % state_sequence_rate == 0) && (state_sequences[current_state_sequence]["states"].length > 0)) {
       console.log("advancing state -- position is now " + state_sequence_position);
       console.log("... now its " + state_sequence_position);
       if(state_sequence_position == state_sequences[current_state_sequence]["states"].length) {
         if(global_playback_mode == "state_sequence_once") {
-          clear_state();
+          unload_state();
           return;
         } else {
           state_sequence_position = 0;
         }
-      } else {
-        console.log("should be loading next state (position " + state_sequence_position + "): " + state_sequences[current_state_sequence]["states"][state_sequence_position]);
-        load_state(state_sequences[current_state_sequence]["states"][state_sequence_position]);
-        state_sequence_position ++;
       }
+      console.log("should be loading next state (position " + state_sequence_position + "): " + state_sequences[current_state_sequence]["states"][state_sequence_position]);
+      load_state(state_sequences[current_state_sequence]["states"][state_sequence_position]);
+      state_sequence_position ++;
     }
   }
 
@@ -910,8 +929,9 @@ function do_cycle() {
 
 function load_state(v) {
 
-  global_playback_mode = "normal";
+  //global_playback_mode = "normal";
 
+/*
   var temp_container = $("<div/>");
   temp_container.html(states[v]["html"]);
   var imgs_needed = temp_container.find("img").length;
@@ -926,8 +946,9 @@ function load_state(v) {
   for(var n = 0; n < imgs_needed; n++) {
     $("#container img").eq(n).attr("src",temp_container.find("img").eq(n).attr("src"));
   }
+*/
 
-  //$("#container").html(states[v]["html"]);
+  $("#container").html(states[v]["html"]);
 
   /* layer_store = [];
   for(var x in layers) {
@@ -959,7 +980,7 @@ function save_state_for_restore() {
   }
 }
 
-function clear_state() {
+function unload_state() {
   global_playback_mode = "normal";
   $("#layer_selector").removeClass("hideme");
   $("#container").html("");
@@ -1085,16 +1106,9 @@ $(document).ready(function() {
       sequences[n] = saved["sequences"][n];
       sequences[n]["frames"] = decompress_frame_sequence(sequences[n]["frames"]);
     }
-  } else {
-      build_sequences_from_clips();
-    }
-
-  //here we will also restore:
-  //states
-  //state_sequences
-  //screen_sequences
-
-
+  }
+  //this function will check if the sequence is already built from that clip
+  build_sequences_from_clips();
 
   init_controls();
 
