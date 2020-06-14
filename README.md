@@ -18,11 +18,13 @@ Download the files wherever you like. To launch, open the index.html file in you
 ## Upcoming Features
 
 A few things I'm planning to add soon:
-- ability to "record" from currently playing sequence to a buffer in order to be able to build new sequences from bits of other sequences ** (DONE) **
+- ability to "record" from currently playing sequence to a buffer in order to be able to build new sequences from bits of other sequences **(DONE)**
 - ability to record individual frames as above
 - ability to record the actual screen as it appears and store as a special sequence
 - pre-made complex effects; for instance, zoom + shift patterns, wiggle patterns, slow fade in and out of opacity, etc.
 - ability for the user to name and save effects or groups of effects
+- ability to delete sequences, states, state_sequences
+- allow state sequence timing to be specified in cycles (as current), seconds (e.g. "10s") or minutes (e.g. "2m")
 
 ## How to Use
 
