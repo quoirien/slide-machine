@@ -484,6 +484,7 @@ function init_controls() {
                         my_state["layers"][n].sequence.frames = compress_frame_sequence(my_state["layers"][n].sequence.frames);
                       }
                     }
+                    my_state["index"] = next_master_index();
                     states.push(my_state);
                     console.log(JSON.stringify(states));
                     init_controls();
@@ -538,6 +539,7 @@ function init_controls() {
                   "fun":function(v) {
                     state_sequences.push({
                       "name":v,
+                      "index":next_master_index(),
                       "states":[]
                     });
                     init_controls();
@@ -722,6 +724,7 @@ function init_controls() {
 }
 
 function delete_the_linked_layers(curr_lay) {
+  console.log("deleting linked layers");
   while(curr_lay < layers.length - 1) {
     if(layers[curr_lay + 1].is_linked) {
       console.log("next one up is linked, moving up");
@@ -730,7 +733,11 @@ function delete_the_linked_layers(curr_lay) {
       break;
     }
   }
+  console.log("should have found my top linked layer: " + curr_lay);
+  console.log("my layer:");
+  console.log(JSON.stringify(layers[curr_lay]));
   while(layers[curr_lay].is_linked) {
+    console.log("this one (" + curr_lay + ") is liked.")
     layers[curr_lay].delete_layer();
     //delete layers[curr_lay];
     //$("#container img").eq(curr_lay).remove();
