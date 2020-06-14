@@ -69,13 +69,26 @@ The Slide Machine is intended to be synched to live music (if desired). At any t
 
 ### UI
 
-The idea of the UI is that all controls are handled via a single line at the bottom of the screen; this way you can see what you're doing while making live changes but the controls display is pretty unobtrusive where it's being projected (if projecting on a screen you can set up so controls are off screen)
+The idea of the UI is that all controls are handled via a single line at the bottom of the screen; this way you can see what you're doing while making live changes but the controls display is pretty unobtrusive where it's being projected (if projecting on a screen you can set up so controls are off screen). Also note that the controls are hidden by default - press any key to wake up the controls. Other than the instant keys (discussed below), a keypress when the controls are hidden won't do anything, it will just make the controls stop being hidden.
 
 Note that when you launch the Slide Machine, you will need to make sure you have focus on the window so keypresses can be captured. The cursor (mouse pointer) is hidden on the main part of the screen but click there anyhow to make sure you have focus.
 
 Control navigation is set up from left to right, and we'll go through it in order from left to right. The arrow keys are used to navigate through menus. Essentially this is like a tree with the root on the left. So left arrow brings you "down" the tree, right arrow "up" the tree, and up and down arrows change which option or branch (submenu) you select. Enter executes the option. If there is an input, right arrow moves focus into the input. If editing text in an input, the arrow keys will no longer navigate the menus (because arrow keys are used to move around within the input field) - to get back to navigating through the menus, click **Esc**.
 
 Any menu item with options or submenus has a **>** to the right.
+
+#### Instant Keys
+
+A few keys are reserved for instant functions:
+| key | function |
+|---|---|
+| \[  | set loop startpoint  |
+| \]  | set loop endpoint  |
+| = | clear loop |
+| - | pause playback |
+| # | tap repeatedly to set beat |
+| \ | alternate key to tap repeatedly to set beat |
+| \[SPACE\] | advance to next state in state sequence |
 
 #### Key Shortcuts
 
