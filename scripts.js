@@ -2,9 +2,10 @@
 var CONTROLS_TIMEOUT_MS = 3000;
 var KEY_BUFFER_TIMEOUT_MS = 2000;
 
-var sequences = [];
-var states = [];
-var state_sequences = [];
+var master_index = 1;
+var sequences = {};
+var states = {};
+var state_sequences = {};
 var layers = [];
 var recording = false;
 var buffer = [];
@@ -406,7 +407,8 @@ function build_sequences_from_clips() {
       for(var i = 1; i <= all_clips[n][1]; i++) {
         my_sequence.add_frame(clip_name,pad(i,pad_amount),my_dims);
       }
-      sequences.push(my_sequence);
+      sequences[next_master_index()] = my_sequence;
+      //sequences.push(my_sequence);
     }
   }
 }
@@ -725,10 +727,11 @@ function do_export() {
       this.frames_length = 0; */
   var my_saved = {
     "key_shortcuts":key_shortcuts,
-    "sequences":[],
-    "screen_sequences":[],
+    "sequences":{},
+    "screen_sequences":{},
     "states":states,
-    "state_sequences":state_sequences
+    "state_sequences":state_sequences,
+    "master_index":master_index
   };
 
   //my_saved["key_shortcuts"] = key_shortcuts;
@@ -741,7 +744,9 @@ function do_export() {
     };
     my_saved["sequences"][n] = my_seq_ob;
   }
-  $("body").append("<textarea id=\"export_textarea\">var saved = " + JSON.stringify(my_saved) + ";</textarea>");
+  var save_string = JSON.stringify(my_saved);
+  save_string = save_string.replace(/"sequences":{/,"\n\n\"sequences\":{").replace(/"screen_sequences":{/,"\n\n\"screen_sequences\":{").replace(/"states":{/,"\n\n\"states\":{").replace(/"state_sequences":{/,"\n\n\"state_sequences\":{").replace(/"master_index":/,"\n\n\"master_index\":").replace(/"screen_sequences":{/,"\n\n\"screen_sequences\":{").replace(/"name":/g,"\n    \"name\":");
+  $("body").append("<textarea id=\"export_textarea\">var saved = " + save_string + ";</textarea>");
   $("#export_textarea").css({"position":"fixed","z-index":"1000"});
   $("#export_textarea").select();
   $("#export_textarea").click(function() {
@@ -1088,6 +1093,12 @@ function set_beat() {
   }
 }
 
+function next_master_index() {
+  var curr = master_index;
+  master_index ++;
+  return curr;
+}
+
 
 $(document).ready(function() {
 
@@ -1097,16 +1108,45 @@ $(document).ready(function() {
     key_shortcuts = saved["key_shortcuts"];
   }
 
+  if(typeof saved["master_index"] !== "undefined") {
+    master_index = saved["master_index"];
+  }
+
   states = saved["states"];
   state_sequences = saved["state_sequences"];
   screen_sequences = saved["screen_sequences"];
 
-  if(saved["sequences"].length > 0) {
+  if($.isArray(saved["sequences"])) {
+    var new_saved_sequences = {};
     for(var n in saved["sequences"]) {
-      sequences[n] = saved["sequences"][n];
-      sequences[n]["frames"] = decompress_frame_sequence(sequences[n]["frames"]);
+      new_saved_sequences[next_master_index()] = saved["sequences"][n];
+    }
+    saved["sequences"] = new_saved_sequences;
+  }
+
+  for(var n in saved["sequences"]) {
+    sequences[n] = saved["sequences"][n];
+    sequences[n]["frames"] = decompress_frame_sequence(sequences[n]["frames"]);
+  }
+
+  for(var n in states) {
+    if(typeof states[n]["index"] === "undefined") {
+      states[n]["index"] = next_master_index();
     }
   }
+
+  for(var n in state_sequences) {
+    if(typeof state_sequences[n]["index"] === "undefined") {
+      state_sequences[n]["index"] = next_master_index();
+    }
+  }
+
+  for(var n in screen_sequences) {
+    if(typeof screen_sequences[n]["index"] === "undefined") {
+      screen_sequences[n]["index"] = next_master_index();
+    }
+  }
+
   //this function will check if the sequence is already built from that clip
   build_sequences_from_clips();
 
