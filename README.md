@@ -2,7 +2,7 @@
 (projectile psychotronics)
 
 ## What it is
-Simple in-browser environment to manage building psychotronic visuals (mainly intended for projection in live performance settings) on the fly.
+Simple in-browser environment to manage building psychotronic visuals (mainly intended for projection in live performance settings) on the fly. Quite some time ago I made something similar-ish in Flash that could load video clips, modify opacity, zoom, etc. The current incarnation works on the basis of using javascript to load frames from clips (video sequences saved as individual bitmap frames) in various ways, loop, layer, mix images with opacity, etc. I've used versions of this as ambient environmental visuals on a dancefloor and projected behind an improv group.
 
 ## The Name
 It's named after the [13th Floor Elevators song "Slide Machine"](https://www.youtube.com/watch?v=0Dh4oc0Pj8k).
@@ -18,7 +18,7 @@ Download the files wherever you like. To launch, open the index.html file in you
 ## Upcoming Features
 
 A few things I'm planning to add soon:
-- ability to "record" from currently playing sequence to a buffer in order to be able to build new sequences from bits of other sequences
+- ability to "record" from currently playing sequence to a buffer in order to be able to build new sequences from bits of other sequences ** (DONE) **
 - ability to record individual frames as above
 - ability to record the actual screen as it appears and store as a special sequence
 - pre-made complex effects; for instance, zoom + shift patterns, wiggle patterns, slow fade in and out of opacity, etc.
@@ -264,9 +264,25 @@ This option plays the state sequence selected, but will only advance to the next
 
 Select a state to add to the currently playing state sequence. Note that it will be added to the end (not in the position of the currently loaded state).
 
+#### Mode > Buffer > Start/Stop Recording
+
+Start or stop recording frames to buffer. The buffer is just a storage space for frames. Every time there is a frame advance on the currently selected layer, that frame is added to the buffer if recording is on. The buffer continues accumulating frames until cleared, so you can record frames from one sequence, then another, as desired, to build a new sequence.
+
+#### Mode > Buffer > Save Buffer to New Sequence
+
+Enter name, then new sequence will be created using the frames currently in the buffer. Note that the buffer is not cleared in this action (see Clear Buffer below) so you can save contents of buffer as one sequence, then add more frames to it and save it as a new sequence, or whatever.
+
+#### Mode > Buffer > Append Buffer to Existing Sequence
+
+Appends frames that are currently in the buffer to whichever existing sequence you choose.
+
+#### Mode > Buffer > Clear Buffer
+
+Clears frames from the buffer - this is the only way frames are cleared from the buffer.
+
 #### Mode > Global > Export
 
-Used to export all saved states, sequences, state sequences, and key shortcuts. This will pop up a textarea with selected text. Copy using ctrl-C/command-C on most platforms, then open saved.js file in a text editor, replace contents with pasted text and save the file. Next time you open the Slide Machine this file will be read from and used to preserve all of your saved data. 
+Used to export all saved states, sequences, state sequences, screen sequences (will export these when they exist) and key shortcuts. This will pop up a textarea with selected text. Copy using ctrl-C/command-C on most platforms, then open saved.js file in a text editor, replace contents with pasted text and save the file. Next time you open the Slide Machine this file will be read from and used to preserve all of your saved data. 
 
 To hide the export textarea, click on it.
 
