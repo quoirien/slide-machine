@@ -25,6 +25,8 @@ A few things I'm planning to add soon:
 - ability for the user to name and save effects or groups of effects
 - ability to delete sequences, states, state_sequences
 - allow state sequence timing to be specified in cycles (as current), seconds (e.g. "10s") or minutes (e.g. "2m")
+- for effects, allow user to put in ranges, so for instance 100-300,4 could mean go from 100 to 300% in 4 steps
+- for effects, allow user to put in repeats, so for instance for flash, could have 1x100,0x50 = 100 1s followed by 50 0s
 
 ## How to Use
 
