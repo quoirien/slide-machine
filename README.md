@@ -18,15 +18,15 @@ Download the files wherever you like. To launch, open the index.html file in you
 ## Upcoming Features
 
 A few things I'm planning to add soon:
-- ability to "record" from currently playing sequence to a buffer in order to be able to build new sequences from bits of other sequences **(DONE)**
-- ability to record individual frames as above
+- ability to record individual frames to buffer
 - ability to record the actual screen as it appears and store as a special sequence
 - pre-made complex effects; for instance, zoom + shift patterns, wiggle patterns, slow fade in and out of opacity, etc.
 - ability for the user to name and save effects or groups of effects
 - ability to delete sequences, states, state_sequences
 - allow state sequence timing to be specified in cycles (as current), seconds (e.g. "10s") or minutes (e.g. "2m")
-- for effects, allow user to put in ranges, so for instance 100-300,4 could mean go from 100 to 300% in 4 steps
-- for effects, allow user to put in repeats, so for instance for flash, could have 1x100,0x50 = 100 1s followed by 50 0s
+- for effects, allow user to put in ranges, so for instance 100-300,4 could mean go from 100 to 300% in 4 steps **(DONE)**
+- for effects, allow user to put in repeats, so for instance for flash, could have 1x100,0x50 = 100 1s followed by 50 0s **(DONE)**
+- ability to "record" from currently playing sequence to a buffer in order to be able to build new sequences from bits of other sequences **(DONE)**
 
 ## How to Use
 
@@ -160,7 +160,24 @@ will play back in this sequence: Forward 1 frame, Forward 1 frame, Forward 1 fra
 
 #### Mode > This Layer > Effects >
 
-All of the Effects can take either a single integer or a comma-separated series. If there are a series of values, the next value for that particular effect will be set when the sequence advances.
+All of the Effects can take either a single integer or a comma-separated series. If there are a series of values, the next value for that particular effect will be set when the sequence advances. So for instance, if you want to have a wiggly zoom in and out:
+````
+100,120,140,120
+````
+Or a fixed 200% zoom:
+````
+200
+````
+If you want to define longer ranges of values, in any of these fields, you can use certain shorthand conventions:
+````
+110x10,120
+````
+The above would convert to: 110,110,110,110,110,110,110,110,110,110,120
+(10 x 110 followed by 120)
+````
+100_200x6
+````
+The above would convert to a range from 100 to 200 in 6 total steps: 100,120,140,160,180,200
 
 #### Mode > This Layer > Effects > Zoom
 
