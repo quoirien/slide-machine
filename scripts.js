@@ -260,7 +260,7 @@ class Layer {
       this.dims = this.sequence.frames[this.frame_index]["dims"];
 
       //shift should be a percentage of the current container size
-      var working_shift = [Math.floor((this.effects.shift_x[0] / 100) * ($("#container").width())),Math.floor((this.effects.shift_y[0] / 100) * ($("#container").height()))];
+      var working_shift = [Math.floor((this.effects.shift_x[0] / 1000) * ($("#container").width())),Math.floor((this.effects.shift_y[0] / 1000) * ($("#container").height()))];
 
       var container_dims = [$("#container").width(),$("#container").height()];
       var scales = [container_dims[0]/this.dims[0],container_dims[1]/this.dims[1]];
