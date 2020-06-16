@@ -29,15 +29,25 @@ function init_controls() {
                 var ret = [{
                   "label":"None",
                   "id":"sequence-none",
-                  "linked_layer_property":["sequence_index"],
+                  //linked_layer_property":["sequence_index"],
                   "value":-1
                 }];
+                var sequence_list = [];
                 for(var ind in sequences) {
+                    sequence_list.push({
+                      "index":ind,
+                      "name":sequences[ind]["name"]
+                    });
+                }
+                sequence_list.sort(function(a,b) {
+                  return a["name"].localeCompare(b["name"]);
+                });
+                for(var ind in sequence_list) {
                   ret.push({
-                    "label":sequences[ind]["name"],
-                    "id":"sequence-" + ind,
-                    "linked_layer_property":["sequence_index"],
-                    "value":ind
+                    "label":sequence_list[ind]["name"],
+                    "id":"sequence-" + sequence_list[ind]["index"],
+                    //"linked_layer_property":["sequence_index"],
+                    "value":sequence_list[ind]["index"]
                   });
                 }
                 return ret;
@@ -154,7 +164,7 @@ function init_controls() {
                   "linked_layer_effect":"zoom",
                   "input":"input",
                   "fun":function(v) {
-                    v = $.parseJSON("[" + v + "]");
+                    //v = $.parseJSON("[" + v + "]");
                     //layers[current_layer()].effects.zoom = v;
                     layers[current_layer()].set_effect("zoom",v);
                     //layers[current_layer()].needs_redraw = true;
@@ -166,8 +176,9 @@ function init_controls() {
                   "linked_layer_effect":"opacity",
                   "input":"input",
                   "fun":function(v) {
-                    v = $.parseJSON("[" + v + "]");
-                    layers[current_layer()].effects.opacity = v;
+                    //v = $.parseJSON("[" + v + "]");
+                    layers[current_layer()].set_effect("opacity",v);
+                    //layers[current_layer()].effects.opacity = v;
                     layers[current_layer()].needs_redraw = true;
                   }
                 },
@@ -177,7 +188,7 @@ function init_controls() {
                   "linked_layer_effect":"shift_x",
                   "input":"input",
                   "fun":function(v) {
-                    v = $.parseJSON("[" + v + "]");
+                    //v = $.parseJSON("[" + v + "]");
                     layers[current_layer()].set_effect("shift_x",v);
                     //layers[current_layer()].effects.shift_x = v;
                     layers[current_layer()].needs_redraw = true;
@@ -189,7 +200,7 @@ function init_controls() {
                   "linked_layer_effect":"shift_y",
                   "input":"input",
                   "fun":function(v) {
-                    v = $.parseJSON("[" + v + "]");
+                    //v = $.parseJSON("[" + v + "]");
                     layers[current_layer()].set_effect("shift_y",v);
                     //layers[current_layer()].effects.shift_y = v;
                     layers[current_layer()].needs_redraw = true;
@@ -201,7 +212,7 @@ function init_controls() {
                   "linked_layer_effect":"flash",
                   "input":"input",
                   "fun":function(v) {
-                    v = $.parseJSON("[" + v + "]");
+                    //v = $.parseJSON("[" + v + "]");
                     layers[current_layer()].set_effect("flash",v);
                     //layers[current_layer()].effects.flash = v;
                     layers[current_layer()].needs_redraw = true;
@@ -484,8 +495,7 @@ function init_controls() {
                         my_state["layers"][n].sequence.frames = compress_frame_sequence(my_state["layers"][n].sequence.frames);
                       }
                     }
-                    my_state["index"] = next_master_index();
-                    states.push(my_state);
+                    states[next_master_index()] = my_state;
                     console.log(JSON.stringify(states));
                     init_controls();
                     //re_create_controls();
@@ -537,11 +547,10 @@ function init_controls() {
                   "id":"new_state_sequence",
                   "input":"input",
                   "fun":function(v) {
-                    state_sequences.push({
+                    state_sequences[next_master_index()] = {
                       "name":v,
-                      "index":next_master_index(),
                       "states":[]
-                    });
+                    }
                     init_controls();
                   }
                 },
@@ -707,6 +716,22 @@ function init_controls() {
                   "fun":function() {
                     recording = false;
                     buffer = [];
+                  }
+                }
+              ]
+            },
+            {
+              "label":"Delete",
+              "id":"delete_various",
+              "subs":[
+                {
+                  "label":"Delete Sequence",
+                  "id":"delete_sequence",
+                  "fun":function(v) {
+
+                  },
+                  "subs":function() {
+
                   }
                 }
               ]

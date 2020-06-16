@@ -73,6 +73,11 @@ class Layer {
     for(var n in this.effects) {
       this.effects[n] = copy_from.effects[n].slice(0);
     }
+    for(var n in this.effect_strings) {
+      if(copy_from.effect_strings) {
+        this.effect_strings[n] = copy_from.effect_strings[n];
+      }
+    }
     this.linked_layers = copy_from.linked_layers;
     this.is_linked = copy_from.is_linked;
   }
@@ -99,6 +104,13 @@ class Layer {
       "shift_y":[0],
       "opacity":[100],
       "flash":[1]
+    };
+    this.effect_strings = {
+      "zoom":"100",
+      "shift_x":"0",
+      "shift_y":"0",
+      "opacity":"100",
+      "flash":"1"
     }
   }
 
@@ -353,11 +365,43 @@ class Layer {
   }
 
   set_effect(prop,val) {
+    this.effect_strings[prop] = val;
     var curr_lay = layers.indexOf(this);
     var to_act_on = my_linked_layers(curr_lay);
+    if(prop == "opacity") {
+      to_act_on = [layers[curr_lay]];
+    }
+
     console.log("setting effect: " + prop + " " + val);
     console.log("this should affect " + (to_act_on.length) + " layers");
-    val = $.parseJSON("[" + val + "]");
+    //val = $.parseJSON("[" + val + "]");
+    val = val.split(",");
+    var final_val = [];
+    for(var n in val) {
+      if(val[n].indexOf("x") != -1) {
+        var num = parseInt(val[n].split("x")[1]);
+        var v = val[n].split("x")[0];
+        if(v.indexOf("_") != -1) {
+          var firstval = parseInt(v.split("_")[0]);
+          var lastval = parseInt(v.split("_")[1]);
+          var step = (lastval - firstval) / (num - 1);
+          var curr = firstval;
+          final_val.push(curr);
+          for(var c = 2; c < num; c++) {
+            curr += step;
+            final_val.push(parseInt(curr));
+          }
+          final_val.push(lastval);
+        } else {
+          for(var c = 0; c < num; c++) {
+            final_val.push(parseInt(v));
+          }
+        }
+      } else {
+        final_val.push(parseInt(val[n]));
+      }
+    }
+    val = final_val;
 
     for(var x in to_act_on) {
       to_act_on[x]["effects"][prop] = [];
@@ -749,8 +793,10 @@ function do_export() {
   $("body").append("<textarea id=\"export_textarea\">var saved = " + save_string + ";</textarea>");
   $("#export_textarea").css({"position":"fixed","z-index":"1000"});
   $("#export_textarea").select();
+  $("#container").css("cursor","default");
   $("#export_textarea").click(function() {
     $(this).remove();
+    $("#container").css("cursor","none");
   });
 }
 
@@ -802,10 +848,15 @@ function decompress_frame_sequence(frame_sequence) {
 function set_linked_effect_value() {
   if(typeof $("#controls .active").attr("data-linked-layer-effect") !== "undefined") {
     var my_effect = $("#controls .active").attr("data-linked-layer-effect");
-    var raw_val = layers[current_layer()]["effects"][my_effect];
+
+    //we used to get the actual values - now we have a layer of abstraction so we store the string instead
+
+    /* var raw_val = layers[current_layer()]["effects"][my_effect];
     var groomed_val = JSON.stringify(raw_val);
     groomed_val = groomed_val.substr(1,groomed_val.length - 2);
-    $("#controls .active").children("input").first().val(groomed_val);
+
+    $("#controls .active").children("input").first().val(groomed_val); */
+    $("#controls .active").children("input").first().val(layers[current_layer()]["effect_strings"][my_effect]);
   }
 }
 
@@ -1112,7 +1163,22 @@ $(document).ready(function() {
     master_index = saved["master_index"];
   }
 
+  console.log("trying to restore states:");
+  console.log(JSON.stringify(saved["states"]));
   states = saved["states"];
+
+  //doing this for backward compatibility before we had complicated strings to set effects
+  for(var n in states) {
+    for(var x in states[n]["layers"]) {
+      if(!(states[n]["layers"][x]["effect_strings"])) {
+        states[n]["layers"][x]["effect_strings"] = {};
+        for(var nam in states[n]["layers"][x]["effects"]) {
+          states[n]["layers"][x]["effect_strings"][nam] = states[n]["layers"][x]["effects"][nam].join(",");
+        }
+      }
+    }
+  }
+
   state_sequences = saved["state_sequences"];
   screen_sequences = saved["screen_sequences"];
 
