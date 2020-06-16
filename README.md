@@ -189,11 +189,11 @@ Opacity defaults to 100 (100%) - can be set to any value from 0 up.
 
 #### Mode > This Layer > Effects > Shift-X
 
-Amount to shift layer horizontally, from -100 (outside window to the left) to 0 (default - center of window) to 100 (outside window to the right).
+Amount to shift layer horizontally, from -1000 (outside window to the left) to 0 (default - center of window) to 1000 (outside window to the right).
 
 #### Mode > This Layer > Effects > Shift-Y
 
-Amount to shift layer horizontally, from -100 (outside window to the top) to 0 (default - center of window) to 100 (outside window to the bottom).
+Amount to shift layer horizontally, from -1000 (outside window to the top) to 0 (default - center of window) to 1000 (outside window to the bottom).
 
 #### Mode > This Layer > Effects > Flash
 
