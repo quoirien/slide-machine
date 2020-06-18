@@ -23,6 +23,7 @@ A few things I'm planning to add soon:
 - pre-made complex effects; for instance, zoom + shift patterns, wiggle patterns, slow fade in and out of opacity, etc.
 - ability for the user to name and save effects or groups of effects
 - ability to delete sequences, states, state_sequences
+- more complicated constructions for effect values, e.g., able to do something like 100.110x3,100.110.120.110x3 -- here the full stop works like a comma so we are repeating multiple steps, so this example would yield 100,110,100,110,100,110,100,110,120,110,100,110,120,110,100,110,120,110
 - allow state sequence timing to be specified in cycles (as current), seconds (e.g. "10s") or minutes (e.g. "2m")
 - for effects, allow user to put in ranges, so for instance 100-300,4 could mean go from 100 to 300% in 4 steps **(DONE)**
 - for effects, allow user to put in repeats, so for instance for flash, could have 1x100,0x50 = 100 1s followed by 50 0s **(DONE)**
