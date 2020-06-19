@@ -130,7 +130,7 @@ function init_controls() {
                   "id":"playback_pattern",
                   "input":"input",
                   "fun":function(v) {
-                    v = $.parseJSON("[" + v + "]");
+                    v = build_effect_vals(v);
                     layers[current_layer()].set_property("playback_pattern",v);
                   }
                 },
@@ -559,10 +559,11 @@ function init_controls() {
                   "id":"set_state_sequence_rate",
                   "input":"input",
                   "fun":function(v) {
-                    v = parseInt(v);
+                    state_sequence_rate = v;
+                    /* v = parseInt(v);
                     if(v >= 1) {
                       state_sequence_rate = v;
-                    }
+                    } */
                   }
                 },
                 {

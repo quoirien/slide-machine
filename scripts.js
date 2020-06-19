@@ -365,7 +365,7 @@ class Layer {
   }
 
   set_effect(prop,val) {
-    this.effect_strings[prop] = val;
+
     var curr_lay = layers.indexOf(this);
     var to_act_on = my_linked_layers(curr_lay);
     if(prop == "opacity") {
@@ -375,6 +375,10 @@ class Layer {
     console.log("setting effect: " + prop + " " + val);
     console.log("this should affect " + (to_act_on.length) + " layers");
     //val = $.parseJSON("[" + val + "]");
+    var valstring = val;
+    val = build_effect_vals(val);
+
+    /*
     val = val.split(",");
     var final_val = [];
     for(var n in val) {
@@ -402,8 +406,12 @@ class Layer {
       }
     }
     val = final_val;
+    */
+
+    console.log("trying to set " + prop + " to " + JSON.stringify(val));
 
     for(var x in to_act_on) {
+      to_act_on[x]["effect_strings"][prop] = valstring;
       to_act_on[x]["effects"][prop] = [];
       for(var n in val) {
         to_act_on[x]["effects"][prop][n] = val[n];
@@ -412,6 +420,70 @@ class Layer {
     }
   }
 }
+
+function build_effect_vals(st,r_counter) {
+
+    if(typeof r_counter === "undefined") {
+      r_counter = 0;
+    }
+    r_counter ++;
+    if(r_counter > 500) {
+      console.log("bleah, too much recursion.");
+      return;
+    }
+
+    //st - string to parse and convert into array
+    //r_counter - counts recursion to catch infinite recursion
+    var items = st.split(",");
+    var ret = [];
+    if(items.length > 1) {
+      for(var n in items) {
+        ret = ret.concat(build_effect_vals(items[n],r_counter));
+      }
+    } else {
+      //look for multiplier - if no multiplier then look for series, if no series, look for values . separated
+      if(st.indexOf("x") != -1) {
+        var st_arr = st.split("x");
+        var mult = st_arr.pop();
+        st = st_arr.join("x");
+        for(var n = 0; n < mult; n++) {
+          ret = ret.concat(build_effect_vals(st,r_counter));
+        }
+        return ret;
+      } else {
+        //now lets do the same as above but look for full stops (work like commas)
+        if(st.indexOf(".") != -1) {
+          var subitems = st.split(".");
+          for(var n in subitems) {
+            ret = ret.concat(build_effect_vals(subitems[n],r_counter));
+          }
+          return ret;
+        } else {
+          //now we know we have either a simple value or a range that we can expand into a series of values
+          if(st.indexOf("s") == -1) {
+            //finally, we have a simple value, we will return it as a list for concatenation
+            ret = [parseInt(st)]
+          } else {
+            //we have a series of values
+            var sp = st.split("s");
+            var num = parseInt(sp[1]);
+            st = sp[0];
+            var firstval = parseInt(st.split("_")[0]);
+            var lastval = parseInt(st.split("_")[1]);
+            var step = (lastval - firstval) / (num - 1);
+            var curr = firstval;
+            ret.push(parseInt(curr));
+            for(var c = 2; c < num; c++) {
+              curr += step;
+              ret.push(parseInt(curr));
+            }
+            ret.push(lastval);
+          }
+        }
+      }
+    }
+    return ret;
+  }
 
 
 function my_linked_layers(curr_lay) {
@@ -460,7 +532,14 @@ function build_sequences_from_clips() {
 var controls_timeout;
 function set_controls_timeout() {
   clearTimeout(controls_timeout);
-  controls_timeout = setTimeout(function() {$("input").blur();in_input=false;$("#controls").css("display","none");$("#layer_selector").css("display","none");},CONTROLS_TIMEOUT_MS);
+  controls_timeout = setTimeout(function() {
+    if(!in_input) {
+      $("input").blur();in_input=false;$("#controls").css("display","none");$("#layer_selector").css("display","none");
+    } else {
+      set_controls_timeout();
+    }
+  },
+  CONTROLS_TIMEOUT_MS);
 }
 
 
@@ -942,10 +1021,42 @@ var cycle_counter = 0;
 var cycle_interval = 10;
 var last_cycle = 0;
 var last_step_cycle = 0;
+//for state_sequence
+var ss_cycle = 0;
+
 
 function do_cycle() {
   if(paused) {return;}
   now_test = new Date().getTime();
+
+  if(((global_playback_mode == "state_sequence_once") || (global_playback_mode == "state_sequence_loop")) && (state_sequence_rate != parseInt(state_sequence_rate)) && (state_sequences[current_state_sequence]["states"].length > 0)) {
+    if(ss_cycle == 0) {
+      ss_cycle = now_test;
+    }
+    var timed_rate = parseInt(state_sequence_rate);
+    if(state_sequence_rate.indexOf("m") != -1) {
+      timed_rate = timed_rate * 60;
+    }
+    timed_rate = timed_rate * 1000;
+    console.log("timed_rate: " + timed_rate);
+    if((now_test - ss_cycle) > timed_rate) {
+      ss_cycle = now_test;
+      console.log("advancing state -- position is now " + state_sequence_position);
+      console.log("... now its " + state_sequence_position);
+      if(state_sequence_position == state_sequences[current_state_sequence]["states"].length) {
+        if(global_playback_mode == "state_sequence_once") {
+          unload_state();
+          return;
+        } else {
+          state_sequence_position = 0;
+        }
+      }
+      console.log("should be loading next state (position " + state_sequence_position + "): " + state_sequences[current_state_sequence]["states"][state_sequence_position]);
+      load_state(state_sequences[current_state_sequence]["states"][state_sequence_position]);
+      state_sequence_position ++;
+    }
+  }
+
   if((now_test - last_cycle) > cycle) {
     last_cycle = now_test;
     cycle_counter ++;
@@ -954,10 +1065,11 @@ function do_cycle() {
         layers[i].advance_frame();
       }
     }
+
     if(global_playback_mode == "state_sequence_loop") {
       console.log("SSL");
     }
-    if(((global_playback_mode == "state_sequence_once") || (global_playback_mode == "state_sequence_loop")) && (cycle_counter % state_sequence_rate == 0) && (state_sequences[current_state_sequence]["states"].length > 0)) {
+    if(((global_playback_mode == "state_sequence_once") || (global_playback_mode == "state_sequence_loop")) && (cycle_counter % state_sequence_rate == 0) && (state_sequences[current_state_sequence]["states"].length > 0) && (state_sequence_rate == parseInt(state_sequence_rate))) {
       console.log("advancing state -- position is now " + state_sequence_position);
       console.log("... now its " + state_sequence_position);
       if(state_sequence_position == state_sequences[current_state_sequence]["states"].length) {
