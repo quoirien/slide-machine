@@ -23,9 +23,8 @@ A few things I'm planning to add soon:
 - pre-made complex effects; for instance, zoom + shift patterns, wiggle patterns, slow fade in and out of opacity, etc.
 - ability for the user to name and save effects or groups of effects
 - ability to delete sequences, states, state_sequences
-- more complicated constructions for effect values, e.g., able to do something like 100.110x3,100.110.120.110x3 -- here the full stop works like a comma so we are repeating multiple steps, so this example would yield 100,110,100,110,100,110,100,110,120,110,100,110,120,110,100,110,120,110... actually we could do this with even more complicated: 100-200x4x4 for instance. Maybe would be better to use s instead of x for the steps
-- ability for user to resync effects -- because effects are initiated when the user presses enter, they can resync them so they are all executed at once
-- allow state sequence timing to be specified in cycles (as current), seconds (e.g. "10s") or minutes (e.g. "2m")
+- more complicated constructions for effect values, e.g., able to do something like 100.110x3,100.110.120.110x3 -- here the full stop works like a comma so we are repeating multiple steps, so this example would yield 100,110,100,110,100,110,100,110,120,110,100,110,120,110,100,110,120,110... actually we could do this with even more complicated: 100-200x4x4 for instance. Maybe would be better to use s instead of x for the steps **(DONE)** so they are all executed at once
+- allow state sequence timing to be specified in cycles (as current), seconds (e.g. "10s") or minutes (e.g. "2m") **(DONE)**
 - for effects, allow user to put in ranges, so for instance 100-300,4 could mean go from 100 to 300% in 4 steps **(DONE)**
 - for effects, allow user to put in repeats, so for instance for flash, could have 1x100,0x50 = 100 1s followed by 50 0s **(DONE)**
 - ability to "record" from currently playing sequence to a buffer in order to be able to build new sequences from bits of other sequences **(DONE)**
@@ -159,6 +158,32 @@ The Playback Pattern only affects playback when in **Normal** playback mode. Thi
 ````
 
 will play back in this sequence: Forward 1 frame, Forward 1 frame, Forward 1 frame, Forward 1 frame, Backward 1 frame, Backward 1 frame, Backward 1 frame. When following this pattern, the effect will be a sort of "loopy" cycle back and forth, but slowly shifting forward.
+
+You can enter more complex sequences here as well - this is the same functionality as values for the Effects. Use "x" as a multiplier:
+````
+2,1x5,2
+````
+This would yield 2,1,1,1,1,1,2
+
+"s" indicates a series, separate the beginning of series and end with underscore, then "s", then number of steps total (inclusive of first and last values:
+
+````
+1_13s4
+````
+yields 1,5,9,13
+
+You can combine these:
+````
+1_13s4x2,1,1,1
+````
+yields 1,5,9,13,1,5,9,13,1,1,1
+
+You can repeat longer, more complicated sequences by replacing , with . for the repeated section:
+````
+1.2.3x2.2.-4x2,5x3
+````
+yields 1,2,3,3,2,-4,1,2,3,3,2,-4,5,5,5
+(note that the second "x2" repeats the entire previous "phrase" rather than just the 4.
 
 #### Mode > This Layer > Effects >
 
