@@ -187,7 +187,7 @@ yields 1,2,3,3,2,-4,1,2,3,3,2,-4,5,5,5
 
 #### Mode > This Layer > Effects >
 
-All of the Effects can take either a single integer or a comma-separated series. If there are a series of values, the next value for that particular effect will be set when the sequence advances. So for instance, if you want to have a wiggly zoom in and out:
+All of the Effects can take either a single integer or a comma-separated series. If there are a series of values, the next value for that particular effect will be set when the sequence advances - and then loop back to the beginning. So for instance, if you want to have a wiggly zoom in and out:
 ````
 100,120,140,120
 ````
@@ -195,16 +195,31 @@ Or a fixed 200% zoom:
 ````
 200
 ````
-If you want to define longer ranges of values, in any of these fields, you can use certain shorthand conventions:
+You can now enter more complex sequences here as well - this is the same functionality as values for the Effects. Use "x" as a multiplier:
 ````
-110x10,120
+100,120x5,110
 ````
-The above would convert to: 110,110,110,110,110,110,110,110,110,110,120
-(10 x 110 followed by 120)
+This would yield 100,120,120,120,120,120,110
+
+"s" indicates a series, separate the beginning of series and end with underscore, then "s", then number of steps total (inclusive of first and last values:
+
 ````
-100_200x6
+100_200s5
 ````
-The above would convert to a range from 100 to 200 in 6 total steps: 100,120,140,160,180,200
+yields 100,125,150,175,200
+
+You can combine these:
+````
+100_200s5x2,110,110,110
+````
+yields 100,125,150,175,200,100,125,150,175,200,110,110,110
+
+You can repeat longer, more complicated sequences by replacing , with . for the repeated section:
+````
+100.200.300x2.250.150x2,500x3
+````
+yields 100,200,300,100,200,300,250,150,100,200,300,100,200,300,250,150,500,500,500
+(note that the second "x2" repeats the entire previous "phrase" rather than just the "100".
 
 #### Mode > This Layer > Effects > Zoom
 
