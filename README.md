@@ -223,19 +223,19 @@ yields 100,200,300,100,200,300,250,150,100,200,300,100,200,300,250,150,500,500,5
 
 #### Mode > This Layer > Effects > Zoom
 
-Each layer is automatically scaled up to fit in the available window based on the frame dimensions. Zoom defaults to 100 (100%) - can be set to any value from 1 up.
+Each layer is automatically scaled up to fit in the available window based on the frame dimensions. Zoom defaults to 100 (100%) - can be set to any value from 1 up. Note that there are details of complicated ways to set these values above in **Mode > This Layer > Effects >**
 
 #### Mode > This Layer > Effects > Opacity
 
-Opacity defaults to 100 (100%) - can be set to any value from 0 up.
+Opacity defaults to 100 (100%) - can be set to any value from 0 up. Note that there are details of complicated ways to set these values above in **Mode > This Layer > Effects >**
 
 #### Mode > This Layer > Effects > Shift-X
 
-Amount to shift layer horizontally, from -1000 (outside window to the left) to 0 (default - center of window) to 1000 (outside window to the right).
+Amount to shift layer horizontally, from -1000 (outside window to the left) to 0 (default - center of window) to 1000 (outside window to the right). Note that there are details of complicated ways to set these values above in **Mode > This Layer > Effects >**
 
 #### Mode > This Layer > Effects > Shift-Y
 
-Amount to shift layer horizontally, from -1000 (outside window to the top) to 0 (default - center of window) to 1000 (outside window to the bottom).
+Amount to shift layer horizontally, from -1000 (outside window to the top) to 0 (default - center of window) to 1000 (outside window to the bottom). Note that there are details of complicated ways to set these values above in **Mode > This Layer > Effects >**
 
 #### Mode > This Layer > Effects > Flash
 
@@ -244,7 +244,7 @@ Defaults to 1. Takes a series of one or more 1s or 0s such that where there is a
 ````
 1,1,1,1,1,1,1,1,1,1,1,0,0
 ````
-will have the effect of intermittently flashing a glimpse of layers below the current one.
+will have the effect of intermittently flashing a glimpse of layers below the current one. Note that there are details of complicated ways to set these values above in **Mode > This Layer > Effects >** -- though some of this more complicated functionality isn't that useful for the Flash settings because only 1 and 0 have any meaning here.
 
 #### Mode > This Layer > Effects > Orientation >
 
