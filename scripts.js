@@ -143,14 +143,8 @@ class Layer {
       var len = this.sequence.frames.length;
       var my_mode = this.playback_mode;
       if(this.playback_pattern && this.playback_pattern.length > 0 && my_mode == "normal") {
+        console.log("I have a pattern");
         my_mode = "pattern";
-      }
-
-      if(this.sequence.name.indexOf("witch") != -1) {
-        console.log("witch");
-        console.log(this.sequence.frames.length);
-        console.log(this.playback_mode);
-        console.log(my_mode);
       }
       switch(my_mode) {
         case "normal":
@@ -422,7 +416,6 @@ class Layer {
 }
 
 function build_effect_vals(st,r_counter) {
-
     if(typeof r_counter === "undefined") {
       r_counter = 0;
     }
@@ -441,15 +434,19 @@ function build_effect_vals(st,r_counter) {
         ret = ret.concat(build_effect_vals(items[n],r_counter));
       }
     } else {
+
+      //ahhh, no we only want to do this if the string ends in x[0-9]+
+
+
       //look for multiplier - if no multiplier then look for series, if no series, look for values . separated
-      if(st.indexOf("x") != -1) {
+      //if(st.indexOf("x") != -1) {
+      if(/x[0-9]+$/.test(st)) {
         var st_arr = st.split("x");
         var mult = st_arr.pop();
         st = st_arr.join("x");
         for(var n = 0; n < mult; n++) {
           ret = ret.concat(build_effect_vals(st,r_counter));
         }
-        return ret;
       } else {
         //now lets do the same as above but look for full stops (work like commas)
         if(st.indexOf(".") != -1) {
@@ -457,7 +454,6 @@ function build_effect_vals(st,r_counter) {
           for(var n in subitems) {
             ret = ret.concat(build_effect_vals(subitems[n],r_counter));
           }
-          return ret;
         } else {
           //now we know we have either a simple value or a range that we can expand into a series of values
           if(st.indexOf("s") == -1) {

@@ -263,7 +263,9 @@ function init_controls() {
                     insert_blank_layer_above_current();
                     var orig_layer = layers[current_layer()];
                     var new_layer = layers[current_layer() + 1];
+                    console.log("my playback pattern is " + JSON.stringify(this.playback_pattern));
                     new_layer.copy_layer_properties_from(layers[current_layer()]);
+                    console.log("new layer playback_pattern is " + JSON.stringify(new_layer.playback_pattern));
                     new_layer.effects.orientation = "flipx";
                     for(var n in orig_layer.effects.opacity) {
                       new_layer.effects.opacity[n] = Math.floor(orig_layer.effects.opacity[n] / 2);
@@ -700,7 +702,7 @@ function init_controls() {
                     for(var ind in sequences) {
                       ret.push({
                         "label":sequences[ind]["name"],
-                        "id":"sequence-" + ind,
+                        "id":"append-buffer-to-existing-sequence-" + ind,
                         "linked_layer_property":["sequence_index"],
                         "value":ind
                       });
