@@ -18,6 +18,8 @@ Download the files wherever you like. To launch, open the index.html file in you
 ## Upcoming Features
 
 A few things I'm planning to add soon:
+- new effect: squash-x and squash-y; can distort in or out in either dimension
+- to fix: shift-x and shift-y should be relative to window, not to scaled layer image
 - ability to record individual frames to buffer
 - ability to record the actual screen as it appears and store as a special sequence
 - pre-made complex effects; for instance, zoom + shift patterns, wiggle patterns, slow fade in and out of opacity, etc.
