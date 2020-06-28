@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Slide Machine: Projectile Psychotronics</title>
+
+  <!--  <script src="scripts.js"></script>
+    <script src="controls.js"></script>
+    <script src="saved_states.js"></script> -->
+    <style type="text/css">
+      body {background-color:black;position:relative;}
+      * {border:0;margin:0;padding:0;overflow:hidden;font-family:Verdana,Arial,Helvetica,sans-serif;
+      /*cursor:none !important;*/
+    }
+      img {position:absolute;}
+
+      #container {position:fixed;width:1000px;height:500px;overflow:hidden;left:5px;top:5px;cursor:none;}
+      #container img {position:absolute;}
+      #control_container {position:fixed;bottom:0;left:0;background-color:black;padding:3px;color:#333; /*visibility:hidden;*/}
+      #layer_selector, #controls {float:left;}
+      #rec {float:right;color:rgb(100,0,0);visibility:hidden;}
+      #rec.recording {visibility:visible;}
+      #info {float:right;}
+
+      .control_span {padding-left:.6em;display:none;}
+      .control_span.active {display:inline;color:#999;text-decoration:underline;}
+      .control_span.show {display:inline;}
+      .control_span input {background-color:black;border:1px solid #666;color:#333;}
+      .control_span input.live {color:#999;}
+
+      .hideme {display:none !important;}
+
+      /*
+      #info {position:fixed;bottom:0;right:0;background-color:black;padding:3px;color:#333;visibility:hidden;max-width:300px;overflow:hidden;}
+      #recording {position:fixed;bottom:0;right:40%;padding:3px;color:#333;visibility:hidden;color:red;}
+      #controls span {padding:3px 3px 3px 8px;}
+      .control_span {text-decoration:none;display:none;}
+      #layer_control {padding-left:0 !important;}
+      .control_span.show, #layer_control {display:inline;}
+      .control_span.active {text-decoration:underline;color:#666;display:inline;}
+      .control_option {display:none;}
+      .control_option.sel {display:inline;}
+      #controls input {border:1px solid #666;padding:1px;color:#666;background-color:black;}
+      #debug, #import_export {position:fixed;top:0;left:0;background-color:white;display:none;width:90%;height:90%;}
+      #debug textarea, #import_export textarea {width:90%;height:90%;}
+      */
+
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <img src="" />
+    </div>
+    <div id="control_container">
+      <div id="layer_selector">
+        <span data-index="0" class="control_span show">[0]</span>
+      </div>
+      <div id="controls">
+
+      </div>
+      <div id="rec">
+        &nbsp;REC&nbsp;
+      </div>
+      <div id="info">
+
+      </div>
+    </div>
+
+    <!--
+    <div id="recording">
+      [REC]
+    </div>
+    <div id="info">
+    </div>
+    <div id="debug">
+      <textarea></textarea>
+    </div>
+    <div id="import_export">
+      <textarea></textarea>
+    </div>
+  -->
+
+  <script src="jquery-3.2.0.min.js"></script>
+  <script src="controls.js"></script>
+  <script src="clips.js"></script>
+  <script src="scripts.js"></script>
+  <script src="saved.js"></script>
+
+  </body>
+</html>
