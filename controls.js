@@ -130,6 +130,7 @@ function init_controls() {
                   "id":"playback_pattern",
                   "input":"input",
                   "fun":function(v) {
+                    layers[current_layer()].set_property("playback_pattern_string",v);
                     v = build_effect_vals(v);
                     layers[current_layer()].set_property("playback_pattern",v);
                   }
@@ -167,6 +168,30 @@ function init_controls() {
                     //v = $.parseJSON("[" + v + "]");
                     //layers[current_layer()].effects.zoom = v;
                     layers[current_layer()].set_effect("zoom",v);
+                    //layers[current_layer()].needs_redraw = true;
+                  }
+                },
+                {
+                  "label":"Squash-X",
+                  "id":"squash-x",
+                  "linked_layer_effect":"squash_x",
+                  "input":"input",
+                  "fun":function(v) {
+                    //v = $.parseJSON("[" + v + "]");
+                    //layers[current_layer()].effects.zoom = v;
+                    layers[current_layer()].set_effect("squash_x",v);
+                    //layers[current_layer()].needs_redraw = true;
+                  }
+                },
+                {
+                  "label":"Squash-Y",
+                  "id":"squash-y",
+                  "linked_layer_effect":"squash_y",
+                  "input":"input",
+                  "fun":function(v) {
+                    //v = $.parseJSON("[" + v + "]");
+                    //layers[current_layer()].effects.zoom = v;
+                    layers[current_layer()].set_effect("squash_y",v);
                     //layers[current_layer()].needs_redraw = true;
                   }
                 },
@@ -263,7 +288,7 @@ function init_controls() {
                     insert_blank_layer_above_current();
                     var orig_layer = layers[current_layer()];
                     var new_layer = layers[current_layer() + 1];
-                    console.log("my playback pattern is " + JSON.stringify(this.playback_pattern));
+                    console.log("my playback pattern is " + JSON.stringify(orig_layer.playback_pattern));
                     new_layer.copy_layer_properties_from(layers[current_layer()]);
                     console.log("new layer playback_pattern is " + JSON.stringify(new_layer.playback_pattern));
                     new_layer.effects.orientation = "flipx";
@@ -452,6 +477,17 @@ function init_controls() {
                 $("#layer_selector .control_span.show").next().addClass("show");
                 $("#layer_selector .control_span.show").first().removeClass("show");
                 $("#info").html("None");
+              }
+            },
+            {
+              "label":"Duplicate Current",
+              "id":"duplicate_current",
+              "fun":function(v) {
+                delete_the_linked_layers(current_layer());
+                insert_blank_layer_above_current();
+                var orig_layer = layers[current_layer()];
+                var new_layer = layers[current_layer() + 1];
+                new_layer.copy_layer_properties_from(layers[current_layer()]);
               }
             }
           ]
@@ -689,7 +725,7 @@ function init_controls() {
                     my_sequence.frames_length = buffer.length;
                     my_sequence.frames = buffer.slice(0);
                     console.log(JSON.stringify(my_sequence));
-                    sequences.push(my_sequence);
+                    sequences[next_master_index()] = my_sequence;
                     init_controls();
                     return;
                   }
@@ -730,12 +766,67 @@ function init_controls() {
                 {
                   "label":"Delete Sequence",
                   "id":"delete_sequence",
-                  "fun":function(v) {
-
-                  },
                   "subs":function() {
+                    var ret = [];
 
-                  }
+
+                    var sequence_list = [];
+                    for(var ind in sequences) {
+                        sequence_list.push({
+                          "index":ind,
+                          "name":sequences[ind]["name"]
+                        });
+                    }
+                    sequence_list.sort(function(a,b) {
+                      return a["name"].localeCompare(b["name"]);
+                    });
+
+
+                    for(var ind in sequence_list) {
+                      ret.push({
+                        "label":sequence_list[ind]["name"],
+                        "id":"delete-sequence-" + sequence_list[ind]["index"],
+                        "subs":[
+                          {"label":"Yes - delete now",
+                            "id":"delete-sequence-now-" + sequence_list[ind]["index"],
+                            "value":sequence_list[ind]["index"],
+                            "fun":function(v) {
+                              delete sequences[sequence_list[ind]["index"]];
+                              init_controls();
+                              return;
+                            }
+                          }
+                        ]
+                      });
+                    }
+                    return ret;
+                  }()
+                },
+                {
+                  "label":"Delete State",
+                  "id":"delete-state",
+                  "subs": function() {
+                    var ret = [];
+                    for(var ind in states) {
+                      ret.push({
+                        "label":states[ind]["name"],
+                        "id":"delete-state-" + ind,
+                        "subs":[{
+                          "label":"Yes - delete now",
+                          "id":"delete-now-state-" + ind,
+                          "value":ind,
+                          "fun":function(v) {
+                            alert("deleting " + ind);
+                            console.log("pre delete: " + JSON.stringify(states[v]));
+                            delete states[v];
+                            console.log("post delete: " + JSON.stringify(states[v]));
+                            init_controls();
+                          }
+                        }]
+                      });
+                    }
+                    return ret;
+                  }()
                 }
               ]
             }
@@ -786,7 +877,7 @@ function re_create_controls() {
   var my_controls_html = build_onscreen_controls(controls);
   $("#controls").html(my_controls_html);
 
-  if(my_id != "") {
+  if((my_id != "") && ($("[data-id=" + my_id + "]").length > 0)) {
     $("[data-id=" + my_id + "]").addClass("active");
   } else {
     $(".control_span .control_span").first().addClass("active");

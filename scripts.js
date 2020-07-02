@@ -69,13 +69,27 @@ class Layer {
     this.frame_advance = copy_from.frame_advance;
     this.cycle_offset = copy_from.cycle_offset;
     this.playback_pattern = copy_from.playback_pattern;
+    try {
+      this.playback_pattern_string = copy_from.playback_pattern_string;
+    } catch(e) {
+      //no problem
+    }
     this.fill_mode = copy_from.fill_mode;
     for(var n in this.effects) {
-      this.effects[n] = copy_from.effects[n].slice(0);
+      try {
+        this.effects[n] = copy_from.effects[n].slice(0);
+      } catch(e) {
+        //no problem
+      }
+
     }
     for(var n in this.effect_strings) {
       if(copy_from.effect_strings) {
-        this.effect_strings[n] = copy_from.effect_strings[n];
+        try {
+          this.effect_strings[n] = copy_from.effect_strings[n];
+        } catch(e) {
+          //no problem
+        }
       }
     }
     this.linked_layers = copy_from.linked_layers;
@@ -97,27 +111,30 @@ class Layer {
     this.cycle_offset = 0;
     //playback_pattern would be an array of frame advance amounts e.g. 1,1,1,1,-2,1,-2,1,1,1
     this.playback_pattern = [];
+    this.playback_pattern_string = "";
     this.fill_mode = "fill";
     this.effects = {
       "zoom":[100],
       "shift_x":[0],
       "shift_y":[0],
       "opacity":[100],
-      "flash":[1]
+      "flash":[1],
+      "squash_x":[1000],
+      "squash_y":[1000]
     };
     this.effect_strings = {
       "zoom":"100",
       "shift_x":"0",
       "shift_y":"0",
       "opacity":"100",
-      "flash":"1"
+      "flash":"1",
+      "squash_x":"1000",
+      "squash_y":"1000"
     }
   }
 
   advance_frame() {
-    if(!paused) {
       this.do_advance_frame();
-    }
   }
 
   test_in_loop() {
@@ -254,7 +271,7 @@ class Layer {
       this.dims = this.sequence.frames[this.frame_index]["dims"];
 
       //shift should be a percentage of the current container size
-      var working_shift = [Math.floor((this.effects.shift_x[0] / 1000) * ($("#container").width())),Math.floor((this.effects.shift_y[0] / 1000) * ($("#container").height()))];
+      var working_shift = [Math.floor((this.effects.shift_x[0] / 1000) * ($("#container").width())/2),Math.floor((this.effects.shift_y[0] / 1000) * ($("#container").height()/2))];
 
       var container_dims = [$("#container").width(),$("#container").height()];
       var scales = [container_dims[0]/this.dims[0],container_dims[1]/this.dims[1]];
@@ -273,7 +290,9 @@ class Layer {
       } else {
         resize_factor = this.effects.zoom[0] / 100;
       }
-      var display_dims = [Math.floor(this.dims[0] * scaling_ratio * resize_factor), Math.floor(this.dims[1] * scaling_ratio * resize_factor)];
+
+      var squash = [this.effects.squash_x[0] / 1000,this.effects.squash_y[0] / 1000];
+      var display_dims = [Math.floor(this.dims[0] * scaling_ratio * resize_factor * squash[0]), Math.floor(this.dims[1] * scaling_ratio * resize_factor) * squash[1]];
       var display_offsets = [Math.floor((container_dims[0] - display_dims[0]) / 2) + working_shift[0], Math.floor((container_dims[1] - display_dims[1]) / 2) + working_shift[1]];
       my_image.css({"width":display_dims[0] + "px","height":display_dims[1] + "px","left":display_offsets[0] + "px","top":display_offsets[1] + "px"});
       this.needs_redraw = false;
@@ -361,6 +380,7 @@ class Layer {
   set_effect(prop,val) {
 
     var curr_lay = layers.indexOf(this);
+    console.log("Our current layer should be " + curr_lay);
     var to_act_on = my_linked_layers(curr_lay);
     if(prop == "opacity") {
       to_act_on = [layers[curr_lay]];
@@ -560,7 +580,7 @@ function add_to_key_buffer(char) {
 }
 
 var in_input = false;
-var reserved_keys = [32,37,38,39,40,13,16,80,27,219,221,189,187];
+var reserved_keys = [32,37,38,39,40,13,16,80,27,219,221,189,187,190];
 var instant_keys = [32,80,219,221,189,187];
 var bad_char_test = RegExp("[^a-z0-9]");
 
@@ -661,6 +681,10 @@ function handle_keypress(key_code,shifted = false) {
     } else { //we are in reserved keys so we want to do one of the preset actions (arrow keys etc)
       switch(key_code) {
         /* 37 left - 39 right - 38 up - 40 down */
+        case 190: //.
+          //force
+          do_cycle(true);
+        break;
         case 39: //right arrow
           if($("#layer_selector .active").length > 0) {
             $("#layer_selector .control_span.active").removeClass("active").addClass("show");
@@ -1021,8 +1045,8 @@ var last_step_cycle = 0;
 var ss_cycle = 0;
 
 
-function do_cycle() {
-  if(paused) {return;}
+function do_cycle(force=false) {
+  if(paused && !force) {return;}
   now_test = new Date().getTime();
 
   if(((global_playback_mode == "state_sequence_once") || (global_playback_mode == "state_sequence_loop")) && (state_sequence_rate != parseInt(state_sequence_rate)) && (state_sequences[current_state_sequence]["states"].length > 0)) {
@@ -1053,7 +1077,7 @@ function do_cycle() {
     }
   }
 
-  if((now_test - last_cycle) > cycle) {
+  if(((now_test - last_cycle) > cycle) || (force)) {
     last_cycle = now_test;
     cycle_counter ++;
     for(var i in layers) {
