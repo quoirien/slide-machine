@@ -18,7 +18,6 @@ Download the files wherever you like. To launch, open the index.html file in you
 ## V. Upcoming Features
 
 A few things I'm planning to add soon:
-- step through frames when paused with < >
 - record individual frames to buffer
 - record the actual screen as it appears and store as a special sequence
 - pre-made complex effects; for instance, zoom + shift patterns, wiggle patterns, slow fade in and out of opacity, etc.
@@ -87,6 +86,7 @@ A few keys are reserved for instant functions:
 | \]  | set loop endpoint  |
 | = | clear loop |
 | - | pause playback |
+| . | advance cycle while paused |
 | # | tap repeatedly to set beat |
 | \ | alternate key to tap repeatedly to set beat |
 | \[SPACE\] | advance to next state in state sequence |
