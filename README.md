@@ -18,6 +18,7 @@ Download the files wherever you like. To launch, open the index.html file in you
 ## V. Upcoming Features
 
 A few things I'm planning to add soon:
+- preload all frames (optional) - this forces all the frame images into RAM so there isn't any delay when starting a new clip
 - record individual frames to buffer
 - record the actual screen as it appears and store as a special sequence
 - pre-made complex effects; for instance, zoom + shift patterns, wiggle patterns, slow fade in and out of opacity, etc.
