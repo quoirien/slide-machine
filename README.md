@@ -23,6 +23,8 @@ A few things I'm planning to add soon:
 - pre-made complex effects; for instance, zoom + shift patterns, wiggle patterns, slow fade in and out of opacity, etc.
 - ability for the user to name and save effects or groups of effects
 - ability to delete sequences, states, state_sequences
+- ability to build more complex effect sequences; maybe by putting in nested parentheticals so something like (1.2.3x7)x12,(1_20s14x2)x3
+- ability to add masks to images - think just rectangular div with hidden overflow containing the image - maybe this always has to be centered? Actually would be better to have it be independently positioned in the container and then reposition the image relative to it?
 
 ## VI. How to Use
 
