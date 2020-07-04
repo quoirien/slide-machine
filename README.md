@@ -1,5 +1,5 @@
 # slide-machine
-(projectile psychotronics)
+(projectile psychotropics)
 
 ## I. What it is
 Simple in-browser environment to manage building psychotronic visuals (mainly intended for projection in live performance settings) on the fly. Quite some time ago I made something similar-ish in Flash that could load video clips, modify opacity, zoom, etc. The current incarnation works on the basis of using javascript to load frames from clips (video sequences saved as individual bitmap frames) in various ways, loop, layer, mix images with opacity, etc. I've used versions of this as ambient environmental visuals on a dancefloor and projected behind an improv group.
@@ -18,6 +18,7 @@ Download the files wherever you like. To launch, open the index.html file in you
 ## V. Upcoming Features
 
 A few things I'm planning to add soon:
+- control to resynch all effects/special effects - this way combined sequences of effects all start at the same time for better control; e.g. if we want to zoom in and increase opacity in the same cycle, we need to set these and then trigger them to be synched
 - preload all frames (optional) - this loads all images so browser can cache and reduce delay when loading new frames **(done)**
 - record individual frames to buffer
 - record the actual screen as it appears and store as a special sequence
