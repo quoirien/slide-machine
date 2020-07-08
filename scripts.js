@@ -1392,3 +1392,36 @@ $(document).ready(function() {
   alert(my_con["id"]);
 });
 */
+
+function preload_all_images() {
+  preload_image(0,1);
+  $("#info").html("Done loading.");
+}
+
+function preload_image(clip_index,frame_index) {
+  if(clip_index > all_clips.length) {
+    return;
+  } else {
+    $("#info").html("Loading frames from " + all_clips[clip_index][0] + "...");
+    var last_frame = all_clips[clip_index][1];
+    if(frame_index > last_frame) {
+      preload_image(clip_index + 1,1);
+    } else {
+      var fn = "clips/" + all_clips[clip_index][0] + "/" + pad(frame_index,("" + last_frame).length) + ".jpg";
+      /* var my_img = $("<img/>");
+      my_img[0].src = fn;
+      my_img.on("load", function() {
+        preload_image(clip_index,frame_index + 1);
+      }); */
+
+      $("<img/>")
+      .on('load', function() { preload_image(clip_index,frame_index + 1)})
+      .on('error', function() { console.log("error loading image, skipping to next clip");
+      preload_image(clip_index + 1,1);
+     })
+      .attr("src", fn);
+    ;
+
+    }
+  }
+}

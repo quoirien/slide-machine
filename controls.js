@@ -273,6 +273,20 @@ function init_controls() {
                     my_current.effects.orientation = v;
                     my_current.needs_redraw = true;
                    }
+                },
+                {
+                  "label":"Synch Effects and Special Effects",
+                  "id":"synch_effects",
+                  "fun":function() {
+                    alert("synch!");
+                    var my_layer = layers[current_layer()];
+                    for(var prop in my_layer.effect_strings) {
+                      var my_val = my_layer.effect_strings[prop];
+                      if(my_val != "") {
+                        my_layer.set_effect(prop,my_val);
+                      }
+                    }
+                  }
                 }
               ]
             },
@@ -496,6 +510,13 @@ function init_controls() {
           "label":"Global",
           "id":"global",
           "subs":[
+            {
+              "label":"Preload all images",
+              "id":"preload-all-images",
+              "fun":function() {
+                preload_all_images();
+              }
+            },
             {
               "label":"Export",
               "id":"export",
