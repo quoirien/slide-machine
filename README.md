@@ -69,7 +69,7 @@ Layers have properties relating to playback (e.g. normal, reverse, random) and e
 
 The Slide Machine is intended to be synched to live music (if desired). At any time, you can tap out the beat by tapping the **#** or the **\\** key. Tap it a few times and the beat will be derived from the average space between taps. When the beat is set, the cycle will also be set - one cycle is 1/4 of a beat. A cycle is the basic unit of time, a sequence being played at the fastest rate will advance to the next frame once per cycle. 
 
-## V UI
+## VII. UI
 
 The idea of the UI is that all controls are handled via a single line at the bottom of the screen; this way you can see what you're doing while making live changes but the controls display is pretty unobtrusive where it's being projected (if projecting on a screen you can set up so controls are off screen). Also note that the controls are hidden by default - press any key to wake up the controls. Other than the instant keys (discussed below), a keypress when the controls are hidden won't do anything, it will just make the controls stop being hidden.
 
@@ -79,7 +79,7 @@ Control navigation is set up from left to right, and we'll go through it in orde
 
 Any menu item with options or submenus has a **>** to the right.
 
-### V.1 Instant Keys
+### VII.1 Instant Keys
 
 A few keys are reserved for instant functions:
 | key | function |
@@ -93,27 +93,27 @@ A few keys are reserved for instant functions:
 | \ | alternate key to tap repeatedly to set beat |
 | \[SPACE\] | advance to next state in state sequence |
 
-### V.2  Key Shortcuts
+### VII.2  Key Shortcuts
 
 Because it can take time to navigate through the controls, you can create key shortcuts. When you have a control option active, start typing in letters or numbers. You'll see them appear on the lower right. To create the shortcut, hold shift and press Enter. The shortcut will appear in parentheses after the control option. To clear an existing shortcut on the currently active control option, don't type anything, just hold shift and press Enter.
 
 To use a key shortcut, start typing letters/numbers - you'll see them appear in the lower right of the screen. Then press Enter and if there is a defined key shortcut for that string, that control option will become active. Note that active means that it is selected in the controls, but if it has a function, you still need to press Enter to execute it.
 
-### V.3 Layer Selector
+### VII.3 Layer Selector
 
 The first control is the Layer Selector, which looks like this: [0]
 
 Up arrow will move up to higher layers (if any), down arrow will move to lower layers.
 
-### V.4 Mode > This Layer >
+### VII.4 Mode > This Layer >
 
 Set properties of currently selected layer. This includes which sequence is loaded into this layer, how the sequence should be played, effects such as zoom and opacity, and special effects to be applied to the layer.
 
-#### V.4.1 Mode > This Layer > Sequence >
+#### VII.4.1 Mode > This Layer > Sequence >
 
 Select which sequence should be loaded into this layer.
 
-#### V.4.2 Mode > This Layer > Playback Settings >
+#### VII.4.2 Mode > This Layer > Playback Settings >
 
 These settings relate to how the sequence is played back:
 
@@ -131,35 +131,27 @@ Input takes a single integer. Frame Rate dictates how many frames forward the se
 
 ##### Mode > This Layer > Playback Settings > Playback Mode >
 
-| Mode | Description |
-|---|---|
-| **Normal** | The default. Frames will be advanced forward. After last frame in sequence, will return to beginning of sequence. |
+##### Mode > This Layer > Playback Settings > Playback Mode > Normal
 
-###### Mode > This Layer > Playback Settings > Playback Mode > Normal
+The default. Frames will be advanced forward. After last frame in sequence, will return to beginning of sequence.
 
-
-
----
-
-**Mode > This Layer > Playback Settings > Playback Mode > Reverse**
+##### Mode > This Layer > Playback Settings > Playback Mode > Reverse
 
 Frames will advance in reverse order. After first frame in sequence, will return to end of sequence.
 
----
-
-**Mode > This Layer > Playback Settings > Playback Mode > Random**
+##### Mode > This Layer > Playback Settings > Playback Mode > Random
 
 Random frame chosen each time.
 
-**Mode > This Layer > Playback Settings > Playback Mode > Loop Repeat**
+##### Mode > This Layer > Playback Settings > Playback Mode > Loop Repeat
 
 Marked section will play in a loop. Loop start and end points are created by pressing **\[** for start loop point and **\]** for end loop point. Press **\=** to clear loop points for this layer. If no loop points are set, beginning and end of sequence will be treated as start and end points.
 
-**Mode > This Layer > Playback Settings > Playback Mode > Loop Bounce**
+##### Mode > This Layer > Playback Settings > Playback Mode > Loop Bounce
 
 As above, but instead of repeating, the playback direction reverses at each end of the loop.
 
-**Mode > This Layer > Playback Settings > Playback Pattern**
+##### Mode > This Layer > Playback Settings > Playback Pattern
 
 The Playback Pattern only affects playback when in **Normal** playback mode. This field takes comma-separated integers specifying how many frames to advance (and in which direction) each time the frame advances. For instance, entering a pattern like this
 
@@ -195,7 +187,7 @@ You can repeat longer, more complicated sequences by replacing , with . for the 
 yields 1,2,3,3,2,-4,1,2,3,3,2,-4,5,5,5
 (note that the second "x2" repeats the entire previous "phrase" rather than just the 4.
 
-#### V.4.3 Mode > This Layer > Effects >
+#### VII.4.3 Mode > This Layer > Effects >
 
 All of the Effects can take either a single integer or a comma-separated series. If there are a series of values, the next value for that particular effect will be set when the sequence advances - and then loop back to the beginning. So for instance, if you want to have a wiggly zoom in and out:
 ````
@@ -269,19 +261,19 @@ This effect does not take multiple values. Select an option (all are self-eviden
 
 The special effects create copies of the current layer to create these effects. These layers are then marked internally as "linked" to the current layer. If a new special effect is applied, all the linked layers will be first removed. The special effect can also be removed by going to **Mode > Layer Control > Delete Current Linked Layers**.
 
-**Mode > This Layer > Special Effects > Transreflect Horizontal**
+##### Mode > This Layer > Special Effects > Transreflect Horizontal
 
 Mirrors the current layer horizontally and applies 50% opacity to the second layer so the two layers blend.
 
-#### VI.6.25 Mode > This Layer > Special Effects > Transreflect Vertical
+##### Mode > This Layer > Special Effects > Transreflect Vertical
 
 Mirrors the current layer Vertically and applies 50% opacity to the second layer so the two layers blend.
 
-#### VI.6.26 Mode > This Layer > Special Effects > Transreflect Horiz and Vert
+##### Mode > This Layer > Special Effects > Transreflect Horiz and Vert
 
 Mirrors the current layer Vertically and Horizontally and balances opacity on linked layers so all blend.
 
-#### VI.6.27 Mode > This Layer > Special Effects > Trails (#, Distance)
+##### Mode > This Layer > Special Effects > Trails (#, Distance)
 
 Takes two integer values separated by a comma, one for number, one for distance. This creates duplicate copies of the current layer, distance then determines how much each new linked layer will be advanced, creating a kind of ghosting "trails" effect.
 
@@ -289,89 +281,97 @@ Then all linked layers have their opacities balanced to blend.
 
 Note that this special effect works best applied after other changes. If you have this special effect applied and then change sequence for instance, the special effect can be disrupted and should be reapplied.
 
-#### VI.6.28 Mode > Layer Control > Delete Current Layer
+### VII.5 Mode > Layer Control >
+
+The Layer Control mode is used for general control of layers; for now that comprises adding new layers and removing layers. 
+
+#### VII.5.1 Mode > Layer Control > Delete Current Layer
 
 Self-evident.
 
-#### VI.6.29 Mode > Layer Control > Delete Current Linked Layers
+#### VII.5.2 Mode > Layer Control > Delete Current Linked Layers
 
 Deletes all linked layers in the group of current layer - but retains the original layer. Basically, this removes any Special Effects applied as described above.
 
-#### VI.6.30 Mode > Layer Control > Insert Blank Layer Above Current
+#### VII.5.3 Mode > Layer Control > Insert Blank Layer Above Current
 
 Inserts blank layer above current and selects that layer so you are immediately ready to assign sequence to that layer, etc.
 
-#### VI.6.31 Mode > Layer Control > Insert Blank Layer Below Current
+#### VII.5.4 Mode > Layer Control > Insert Blank Layer Below Current
 
 Inserts blank layer below current and selects that layer so you are immediately ready to assign sequence to that layer, etc.
 
-#### VI.6.32 Mode > Global >
+### VII.6 Mode > Global >
 
 All controls not related to layers directly are within Global.
 
-#### VI.6.33 Mode > Global > Reset
+#### VII.6.1 Mode > Global > Reset
 
 Reset all to basic state - one layer with no sequence chosen, all playback normal, etc.
 
-#### VI.6.34 Mode > Global > States >
+#### VII.6.2 Mode > Global > States >
 
 A 'State' is the current state of the layers. The layers and their properties are stored in the state, but the beat is not saved.
 
-#### VI.6.35 Mode > Global > States > Save State
+##### Mode > Global > States > Save State
 
 Enter name for current state to be able to recall it later.
 
-#### VI.6.36 Mode > Global > States > Load State
+##### Mode > Global > States > Load State
 
 Load previously saved state. Note that when a state is loaded, the current state is by default saved "to one side" so when the loaded state is unloaded, the previous state is returned to.
 
-#### VI.6.37 Mode > Global > States > Unload State
+##### Mode > Global > States > Unload State
 
 Unload currently loaded state and restore previous state
 
-#### VI.6.38 Mode > Global > States > New State Sequence
+##### Mode > Global > States > New State Sequence
 
 A state sequence is a sequence of states (really). The idea here is that you can build a number of states, potentially changing each a bit and saving as a new state so there is a natural transition, or just storing a number of unrelated states, then you can put them together into a sequence which can be stepped through in rhythm to the beat or can be manually advanced.
 
 To create a new state sequence, just input any name and press Enter. After creating, you have an empty state sequence. In order to add states to it, you need to initiate it by choosing **Play State Sequence Loop** (see below). When this state sequence is playing, you will be able to select options to add states to it (see below).
 
-#### VI.6.39 Mode > Global > States > Set State Sequence Rate
+##### Mode > Global > States > Set State Sequence Rate
 
 This is the rate the state sequence will be stepped through. The field takes an integer. 1 is the fastest, to advance to next state each cycle. 2 is half that speed, and so on. Default is 24.
 
-#### VI.6.40 Mode > Global > States > Play State Sequence Once >
+##### Mode > Global > States > Play State Sequence Once
 
 Choose from your previously saved state sequences. This will play the selected state sequence through once, and then restore the previous state of your layers.
 
-#### VI.6.41 Mode > Global > States > Play State Sequence Loop >
+##### Mode > Global > States > Play State Sequence Loop
 
 This will play through the selected state sequence and loop infinitely (until either **Unload State** or **Reset** is executed). This is the option that should be selected if you are working on adding states to an existing state sequence. Note that when you add a state, it will be added to the end (not in the position of the currently loaded state).
 
-#### VI.6.42 Mode > Global > States > Play State Sequence Manual Advance >
+##### Mode > Global > States > Play State Sequence Manual Advance
 
 This option plays the state sequence selected, but will only advance to the next state in the sequence when space bar is pressed.
 
-#### VI.6.43 Mode > Global > States > Add State to Currently Selected Sequence >
+##### Mode > Global > States > Add State to Currently Selected Sequence
 
 Select a state to add to the currently playing state sequence. Note that it will be added to the end (not in the position of the currently loaded state).
 
-#### VI.6.44 Mode > Buffer > Start/Stop Recording
+#### VII.6.3 Mode > Buffer
+
+The buffer is a temporary storage space for frames - you can capture frames from different sequences to the buffer, then save its contents to a new sequence.
+
+##### Mode > Buffer > Start/Stop Recording
 
 Start or stop recording frames to buffer. The buffer is just a storage space for frames. Every time there is a frame advance on the currently selected layer, that frame is added to the buffer if recording is on. The buffer continues accumulating frames until cleared, so you can record frames from one sequence, then another, as desired, to build a new sequence.
 
-#### VI.6.45 Mode > Buffer > Save Buffer to New Sequence
+##### Mode > Buffer > Save Buffer to New Sequence
 
 Enter name, then new sequence will be created using the frames currently in the buffer. Note that the buffer is not cleared in this action (see Clear Buffer below) so you can save contents of buffer as one sequence, then add more frames to it and save it as a new sequence, or whatever.
 
-#### VI.6.46 Mode > Buffer > Append Buffer to Existing Sequence
+##### Mode > Buffer > Append Buffer to Existing Sequence
 
 Appends frames that are currently in the buffer to whichever existing sequence you choose.
 
-#### VI.6.47 Mode > Buffer > Clear Buffer
+##### Mode > Buffer > Clear Buffer
 
 Clears frames from the buffer - this is the only way frames are cleared from the buffer.
 
-#### VI.6.48 Mode > Global > Export
+#### VI.6.4 Mode > Global > Export
 
 Used to export all saved states, sequences, state sequences, screen sequences (will export these when they exist) and key shortcuts. This will pop up a textarea with selected text. Copy using ctrl-C/command-C on most platforms, then open saved.js file in a text editor, replace contents with pasted text and save the file. Next time you open the Slide Machine this file will be read from and used to preserve all of your saved data. 
 
