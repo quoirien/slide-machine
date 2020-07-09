@@ -32,7 +32,7 @@ A few things I'm planning to add soon:
 
 ### VI.1 Clips
 
-Clips are the basic building block of the Slide Machine. Each clip is composed of a series of 'frames' (browser-displayable images). Within the **clips** directory are subdirectories - each of these contains the files for that clip. The files must be named as a number with leading zeros + ".jpg". Don't worry about it if they **aren't** jpegs, the browser won't care. This is at least true of bitmap formats, I haven't experimented with svg files or anything as yet. So, for instance, if a given clip has 20 frames, they should be named 01.jpg, 02.jpg, ... 20.jpg. If a clip has 800 frames, 001.jpg, 002.jpg etc.
+Clips are the basic building block of the Slide Machine. Each clip is composed of a series of 'frames' (browser-displayable images). Within the **clips** directory are subdirectories - each of these contains the files for that clip. The files must be named as a number with leading zeros + ".jpg". Don't worry about it if they **aren't** jpegs, the browser won't care. This is at least true of bitmap formats, I haven't experimented with svg files or anything as yet. So, for instance, if a given clip has 20 frames, they should be named 01.jpg, 02.jpg, ... 20.jpg. If a clip has 800 frames, 001.jpg, 002.jpg etc. I use a Windows utility called RegexRenamer that works well for renaming big batches of files sequentially.
 
 #### VI.1.1 Creating Clips
 
@@ -129,11 +129,15 @@ Input takes a single integer. Frame Rate dictates how many frames forward the se
 
 ---
 
-##### Mode > This Layer > Playback Settings > Playback Mode
+##### Mode > This Layer > Playback Settings > Playback Mode >
+
+| Mode | Description |
+|---|---|
+| **Normal** | The default. Frames will be advanced forward. After last frame in sequence, will return to beginning of sequence. |
 
 ###### Mode > This Layer > Playback Settings > Playback Mode > Normal
 
-The default. Frames will be advanced forward. After last frame in sequence, will return to beginning of sequence.
+
 
 ---
 
