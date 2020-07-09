@@ -305,7 +305,7 @@ Inserts blank layer below current and selects that layer so you are immediately 
 
 All controls not related to layers directly are within Global.
 
-#### VII.6.1 Mode > Global > Reset
+#### VII.6.2 Mode > Global > Reset
 
 Reset all to basic state - one layer with no sequence chosen, all playback normal, etc.
 
@@ -376,6 +376,10 @@ Clears frames from the buffer - this is the only way frames are cleared from the
 Used to export all saved states, sequences, state sequences, screen sequences (will export these when they exist) and key shortcuts. This will pop up a textarea with selected text. Copy using ctrl-C/command-C on most platforms, then open saved.js file in a text editor, replace contents with pasted text and save the file. Next time you open the Slide Machine this file will be read from and used to preserve all of your saved data. 
 
 To hide the export textarea, click on it.
+
+#### VII.6.5 Mode > Global > Preload All Images
+
+If you have a lot of clips, this will take time. Basically it just loads every frame of every clip into the browser so they are cached and playback is seamless.
 
 
 
