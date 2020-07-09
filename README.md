@@ -381,6 +381,20 @@ To hide the export textarea, click on it.
 
 If you have a lot of clips, this will take time. Basically it just loads every frame of every clip into the browser so they are cached and playback is seamless.
 
+#### VII.6.6 Mode > Global > Delete
+
+Delete sequences and states here.
+
+##### Mode > Global > Delete > Delete Sequence >
+
+Choose sequence, then click right arrow to confirm you want to delete.
+
+##### Mode > Global > Delete > Delete State >
+
+Choose state, then click right arrow to confirm you want to delete.
+
+
+
 
 
 
