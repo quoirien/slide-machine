@@ -28,7 +28,7 @@ A few things I'm planning to add soon:
 - build more complex effect sequences; maybe by putting in nested parentheticals so something like (1.2.3x7)x12,(1_20s14x2)x3
 - add masks to images - think just rectangular div with hidden overflow containing the image - maybe this always has to be centered? Actually would be better to have it be independently positioned in the container and then reposition the image relative to it?
 
-## VI. How to Use
+## VI. Basics
 
 ### VI.1 Clips
 
@@ -69,7 +69,7 @@ Layers have properties relating to playback (e.g. normal, reverse, random) and e
 
 The Slide Machine is intended to be synched to live music (if desired). At any time, you can tap out the beat by tapping the **#** or the **\\** key. Tap it a few times and the beat will be derived from the average space between taps. When the beat is set, the cycle will also be set - one cycle is 1/4 of a beat. A cycle is the basic unit of time, a sequence being played at the fastest rate will advance to the next frame once per cycle. 
 
-### VI.6 UI
+## V UI
 
 The idea of the UI is that all controls are handled via a single line at the bottom of the screen; this way you can see what you're doing while making live changes but the controls display is pretty unobtrusive where it's being projected (if projecting on a screen you can set up so controls are off screen). Also note that the controls are hidden by default - press any key to wake up the controls. Other than the instant keys (discussed below), a keypress when the controls are hidden won't do anything, it will just make the controls stop being hidden.
 
@@ -79,7 +79,7 @@ Control navigation is set up from left to right, and we'll go through it in orde
 
 Any menu item with options or submenus has a **>** to the right.
 
-#### VI.6.1 Instant Keys
+### V.1 Instant Keys
 
 A few keys are reserved for instant functions:
 | key | function |
@@ -93,51 +93,51 @@ A few keys are reserved for instant functions:
 | \ | alternate key to tap repeatedly to set beat |
 | \[SPACE\] | advance to next state in state sequence |
 
-#### VI.6.2 Key Shortcuts
+### V.2  Key Shortcuts
 
 Because it can take time to navigate through the controls, you can create key shortcuts. When you have a control option active, start typing in letters or numbers. You'll see them appear on the lower right. To create the shortcut, hold shift and press Enter. The shortcut will appear in parentheses after the control option. To clear an existing shortcut on the currently active control option, don't type anything, just hold shift and press Enter.
 
 To use a key shortcut, start typing letters/numbers - you'll see them appear in the lower right of the screen. Then press Enter and if there is a defined key shortcut for that string, that control option will become active. Note that active means that it is selected in the controls, but if it has a function, you still need to press Enter to execute it.
 
-#### VI.6.3 Layer Selector
+### V.3 Layer Selector
 
 The first control is the Layer Selector, which looks like this: [0]
 
 Up arrow will move up to higher layers (if any), down arrow will move to lower layers.
 
-#### VI.6.4 Mode > This Layer >
+### V.4 Mode > This Layer >
 
 Set properties of currently selected layer. This includes which sequence is loaded into this layer, how the sequence should be played, effects such as zoom and opacity, and special effects to be applied to the layer.
 
-##### VI.6.5 Mode > This Layer > Sequence >
+#### V.4.1 Mode > This Layer > Sequence >
 
 Select which sequence should be loaded into this layer.
 
-#### VI.6.6 Mode > This Layer > Playback Settings >
+#### V.4.2 Mode > This Layer > Playback Settings >
 
 These settings relate to how the sequence is played back:
 
-#### VI.6.7 Mode > This Layer > Playback Settings > Frame Delay
+  **Mode > This Layer > Playback Settings > Frame Delay**
 
 Input takes a single integer. Frame Delay dictates the number of cycles before advancing to the next frame. This defaults to 1 which is the fastest. If set to 4, the sequence will be advanced once every four cycles. (Higher numbers are slower).
 
-#### VI.6.8 Mode > This Layer > Playback Settings > Frame Advance
+##### V.4.2.2 Mode > This Layer > Playback Settings > Frame Advance
 
 Input takes a single integer. Frame Rate dictates how many frames forward the sequence is advanced. Defaults to 1. Higher numbers make the sequence appear to be playing back faster.
 
-#### VI.6.9 Mode > This Layer > Playback Settings > Playback Mode
+##### V.4.2.3 Mode > This Layer > Playback Settings > Playback Mode
 
 Playback Mode determines the basic method of advancing frames for the sequence on this layer.
 
-#### VI.6.10 Mode > This Layer > Playback Settings > Playback Mode > Normal
+###### V.4.2.3.1 Mode > This Layer > Playback Settings > Playback Mode > Normal
 
 The default. Frames will be advanced forward. After last frame in sequence, will return to beginning of sequence.
 
-####  VI.6.11 Mode > This Layer > Playback Settings > Playback Mode > Reverse
+##### VI.6.4.7 Mode > This Layer > Playback Settings > Playback Mode > Reverse
 
 Frames will advance in reverse order. After first frame in sequence, will return to end of sequence.
 
-####  VI.6.12 Mode > This Layer > Playback Settings > Playback Mode > Random
+##### VI.6.4.8 Mode > This Layer > Playback Settings > Playback Mode > Random
 
 Random frame chosen each time.
 
