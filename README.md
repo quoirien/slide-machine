@@ -118,33 +118,44 @@ Select which sequence should be loaded into this layer.
 These settings relate to how the sequence is played back:
 
 ##### Mode > This Layer > Playback Settings > Frame Delay
+
 Input takes a single integer. Frame Delay dictates the number of cycles before advancing to the next frame. This defaults to 1 which is the fastest. If set to 4, the sequence will be advanced once every four cycles. (Higher numbers are slower).
+
 ---
+
 ##### Mode > This Layer > Playback Settings > Frame Advance
+
 Input takes a single integer. Frame Rate dictates how many frames forward the sequence is advanced. Defaults to 1. Higher numbers make the sequence appear to be playing back faster.
+
 ---
+
 ##### Mode > This Layer > Playback Settings > Playback Mode
 
 **Mode > This Layer > Playback Settings > Playback Mode > Normal**
+
 The default. Frames will be advanced forward. After last frame in sequence, will return to beginning of sequence.
----
-**Mode > This Layer > Playback Settings > Playback Mode > Reverse**
-Frames will advance in reverse order. After first frame in sequence, will return to end of sequence.
+
 ---
 
-##### VI.6.4.8 Mode > This Layer > Playback Settings > Playback Mode > Random
+**Mode > This Layer > Playback Settings > Playback Mode > Reverse**
+
+Frames will advance in reverse order. After first frame in sequence, will return to end of sequence.
+
+---
+
+**Mode > This Layer > Playback Settings > Playback Mode > Random**
 
 Random frame chosen each time.
 
-#### VI.6.13 Mode > This Layer > Playback Settings > Playback Mode > Loop Repeat
+**Mode > This Layer > Playback Settings > Playback Mode > Loop Repeat**
 
 Marked section will play in a loop. Loop start and end points are created by pressing **\[** for start loop point and **\]** for end loop point. Press **\=** to clear loop points for this layer. If no loop points are set, beginning and end of sequence will be treated as start and end points.
 
-#### VI.6.14 Mode > This Layer > Playback Settings > Playback Mode > Loop Bounce
+**Mode > This Layer > Playback Settings > Playback Mode > Loop Bounce**
 
 As above, but instead of repeating, the playback direction reverses at each end of the loop.
 
-#### VI.6.15 Mode > This Layer > Playback Settings > Playback Pattern
+**Mode > This Layer > Playback Settings > Playback Pattern**
 
 The Playback Pattern only affects playback when in **Normal** playback mode. This field takes comma-separated integers specifying how many frames to advance (and in which direction) each time the frame advances. For instance, entering a pattern like this
 
@@ -180,7 +191,7 @@ You can repeat longer, more complicated sequences by replacing , with . for the 
 yields 1,2,3,3,2,-4,1,2,3,3,2,-4,5,5,5
 (note that the second "x2" repeats the entire previous "phrase" rather than just the 4.
 
-####  VI.6.16 Mode > This Layer > Effects >
+#### V.4.3 Mode > This Layer > Effects >
 
 All of the Effects can take either a single integer or a comma-separated series. If there are a series of values, the next value for that particular effect will be set when the sequence advances - and then loop back to the beginning. So for instance, if you want to have a wiggly zoom in and out:
 ````
@@ -216,40 +227,45 @@ You can repeat longer, more complicated sequences by replacing , with . for the 
 yields 100,200,300,100,200,300,250,150,100,200,300,100,200,300,250,150,500,500,500
 (note that the second "x2" repeats the entire previous "phrase" rather than just the "100".
 
-#### VI.6.17 Mode > This Layer > Effects > Zoom
+##### Mode > This Layer > Effects > Zoom
 
 Each layer is automatically scaled up to fit in the available window based on the frame dimensions. Zoom defaults to 100 (100%) - can be set to any value from 1 up. Note that there are details of complicated ways to set these values above in **Mode > This Layer > Effects >**
 
-#### VI.6.18 Mode > This Layer > Effects > Opacity
+##### Mode > This Layer > Effects > Opacity
 
 Opacity defaults to 100 (100%) - can be set to any value from 0 up. Note that there are details of complicated ways to set these values above in **Mode > This Layer > Effects >**
 
-#### VI.6.19 Mode > This Layer > Effects > Shift-X
+##### Mode > This Layer > Effects > Shift-X
 
 Amount to shift layer horizontally, from -1000 (outside window to the left) to 0 (default - center of window) to 1000 (outside window to the right). Note that there are details of complicated ways to set these values above in **Mode > This Layer > Effects >**
 
-#### VI.6.20 Mode > This Layer > Effects > Shift-Y
+##### Mode > This Layer > Effects > Shift-Y
 
 Amount to shift layer horizontally, from -1000 (outside window to the top) to 0 (default - center of window) to 1000 (outside window to the bottom). Note that there are details of complicated ways to set these values above in **Mode > This Layer > Effects >**
 
-#### VI.6.21 Mode > This Layer > Effects > Flash
+##### Mode > This Layer > Effects > Flash
 
 Defaults to 1. Takes a series of one or more 1s or 0s such that where there is a 1 the layer will be visible, where there is a 0, the layer will be invisible. This effect can be applied in combination with more complicated opacity changes. For instance, a sequence like this
 
 ````
 1,1,1,1,1,1,1,1,1,1,1,0,0
 ````
-will have the effect of intermittently flashing a glimpse of layers below the current one. Note that there are details of complicated ways to set these values above in **Mode > This Layer > Effects >** -- though some of this more complicated functionality isn't that useful for the Flash settings because only 1 and 0 have any meaning here.
+will have the effect of intermittently flashing a glimpse of layers below the current one. Note that there are details of complicated ways to set these values above in **Mode > This Layer > Effects >** -- though some of this more complicated functionality isn't that useful for the Flash settings because only 1 and 0 have any meaning here. But you could do things like:
 
-#### VI.6.22 Mode > This Layer > Effects > Orientation >
+````
+1.0x20,1x20,0x20
+````
+which would have the effect of flashing for 20 cycles, then being visible for 20 cycles, then being invisible for 20 cycles 
+
+##### Mode > This Layer > Effects > Orientation >
 
 This effect does not take multiple values. Select an option (all are self-evident): **Normal, Flip X, Flip Y, Flip Both**
 
-#### VI.6.23 Mode > This Layer > Special Effects >
+##### Mode > This Layer > Special Effects >
 
 The special effects create copies of the current layer to create these effects. These layers are then marked internally as "linked" to the current layer. If a new special effect is applied, all the linked layers will be first removed. The special effect can also be removed by going to **Mode > Layer Control > Delete Current Linked Layers**.
 
-#### VI.6.24 Mode > This Layer > Special Effects > Transreflect Horizontal
+**Mode > This Layer > Special Effects > Transreflect Horizontal**
 
 Mirrors the current layer horizontally and applies 50% opacity to the second layer so the two layers blend.
 
