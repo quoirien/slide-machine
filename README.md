@@ -18,7 +18,7 @@ Download the files wherever you like. To launch, open the index.html file in you
 ## V. Upcoming Features
 
 A few things I'm planning to add soon:
-- control to resynch all effects/special effects - this way combined sequences of effects all start at the same time for better control; e.g. if we want to zoom in and increase opacity in the same cycle, we need to set these and then trigger them to be synched
+- control to resynch all effects/special effects - this way combined sequences of effects all start at the same time for better control; e.g. if we want to zoom in and increase opacity in the same cycle, we need to set these and then trigger them to be synched **-- done but can't really work for special effects (because they work by creating extra linked layers etc. so that's an additional complication for now I'm avoiding**
 - preload all frames (optional) - this loads all images so browser can cache and reduce delay when loading new frames **(done)**
 - record individual frames to buffer
 - record the actual screen as it appears and store as a special sequence
@@ -109,7 +109,7 @@ Up arrow will move up to higher layers (if any), down arrow will move to lower l
 
 Set properties of currently selected layer. This includes which sequence is loaded into this layer, how the sequence should be played, effects such as zoom and opacity, and special effects to be applied to the layer.
 
-#### VI.6.5 Mode > This Layer > Sequence >
+##### VI.6.5 Mode > This Layer > Sequence >
 
 Select which sequence should be loaded into this layer.
 
