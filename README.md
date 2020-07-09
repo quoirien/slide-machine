@@ -131,7 +131,7 @@ Input takes a single integer. Frame Rate dictates how many frames forward the se
 
 ##### Mode > This Layer > Playback Settings > Playback Mode
 
-**Mode > This Layer > Playback Settings > Playback Mode > Normal**
+###### Mode > This Layer > Playback Settings > Playback Mode > Normal
 
 The default. Frames will be advanced forward. After last frame in sequence, will return to beginning of sequence.
 
