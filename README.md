@@ -117,8 +117,8 @@ Select which sequence should be loaded into this layer.
 
 These settings relate to how the sequence is played back:
 
-| **Mode > This Layer > Playback Settings > Frame Delay** |
-| Input takes a single integer. Frame Delay dictates the number of cycles before advancing to the next frame. This defaults to 1 which is the fastest. If set to 4, the sequence will be advanced once every four cycles. (Higher numbers are slower). |
+| **Mode > This Layer > Playback Settings > Frame Delay** | |
+| Input takes a single integer. Frame Delay dictates the number of cycles before advancing to the next frame. This defaults to 1 which is the fastest. If set to 4, the sequence will be advanced once every four cycles. (Higher numbers are slower). | |
 
 | **Mode > This Layer > Playback Settings > Frame Advance** |
 | Input takes a single integer. Frame Rate dictates how many frames forward the sequence is advanced. Defaults to 1. Higher numbers make the sequence appear to be playing back faster. |
