@@ -351,31 +351,31 @@ This option plays the state sequence selected, but will only advance to the next
 
 Select a state to add to the currently playing state sequence. Note that it will be added to the end (not in the position of the currently loaded state).
 
-#### VII.6.3 Mode > Buffer
+#### VII.6.3 Mode > Global > Buffer
 
 The buffer is a temporary storage space for frames - you can capture frames from different sequences to the buffer, then save its contents to a new sequence.
 
-##### Mode > Buffer > Start/Stop Recording
+##### Mode > Global > Buffer > Start/Stop Recording
 
 Start or stop recording frames to buffer. The buffer is just a storage space for frames. Every time there is a frame advance on the currently selected layer, that frame is added to the buffer if recording is on. The buffer continues accumulating frames until cleared, so you can record frames from one sequence, then another, as desired, to build a new sequence.
 
-##### Mode > Buffer > Save Buffer to New Sequence
+##### Mode > Global > Buffer > Save Buffer to New Sequence
 
 Enter name, then new sequence will be created using the frames currently in the buffer. Note that the buffer is not cleared in this action (see Clear Buffer below) so you can save contents of buffer as one sequence, then add more frames to it and save it as a new sequence, or whatever.
 
-##### Mode > Buffer > Append Buffer to Existing Sequence
+##### Mode > Global > Buffer > Append Buffer to Existing Sequence
 
 Appends frames that are currently in the buffer to whichever existing sequence you choose.
 
-##### Mode > Buffer > Clear Buffer
+##### Mode > Global > Buffer > Clear Buffer
 
 Clears frames from the buffer - this is the only way frames are cleared from the buffer.
 
-#### VI.6.4 Mode > Global > Export
+#### VII.6.4 Mode > Global > Export
 
-Used to export all saved states, sequences, state sequences, screen sequences (will export these when they exist) and key shortcuts. This will pop up a textarea with selected text. Copy using ctrl-C/command-C on most platforms, then open saved.js file in a text editor, replace contents with pasted text and save the file. Next time you open the Slide Machine this file will be read from and used to preserve all of your saved data. 
+Used to export all saved states, sequences, state sequences, screen sequences (will export these when they exist) and key shortcuts.
 
-To hide the export textarea, click on it.
+I was doing this by popping up a textarea to cut and paste to a file - but Ben (redfrontdoor.org) pointed out that download.js (http://danml.com/download.html, https://github.com/rndme/download) would be a better way to go. Simple javascript functionality to dump text/binary into a file download. Save as saved.js in the same directory as the rest of the slide machine - or save wherever you like, but it is the local saved.js that is loaded when the slide machine loads.
 
 #### VII.6.5 Mode > Global > Preload All Images
 
