@@ -889,7 +889,13 @@ function do_export() {
   }
   var save_string = JSON.stringify(my_saved);
   save_string = save_string.replace(/"sequences":{/,"\n\n\"sequences\":{").replace(/"screen_sequences":{/,"\n\n\"screen_sequences\":{").replace(/"states":{/,"\n\n\"states\":{").replace(/"state_sequences":{/,"\n\n\"state_sequences\":{").replace(/"master_index":/,"\n\n\"master_index\":").replace(/"screen_sequences":{/,"\n\n\"screen_sequences\":{").replace(/"name":/g,"\n    \"name\":");
+
+  download(save_string, "saved.js", "text/javascript");
+
+
+/*
   $("body").append("<textarea id=\"export_textarea\">var saved = " + save_string + ";</textarea>");
+
   $("#export_textarea").css({"position":"fixed","z-index":"1000"});
   $("#export_textarea").select();
   $("#container").css("cursor","default");
@@ -897,6 +903,8 @@ function do_export() {
     $(this).remove();
     $("#container").css("cursor","none");
   });
+*/
+
 }
 
 function compress_frame_sequence(frame_sequence) {
