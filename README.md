@@ -18,10 +18,13 @@ Download the files wherever you like. To launch, open the index.html file in you
 ## V. Upcoming Features
 
 A few things I'm planning to add soon:
+- quick key to switch to layer navigtion; probably TAB
+- toggle visibility of layer
 - control to resynch all effects/special effects - this way combined sequences of effects all start at the same time for better control; e.g. if we want to zoom in and increase opacity in the same cycle, we need to set these and then trigger them to be synched **-- done but can't really work for special effects (because they work by creating extra linked layers etc. so that's an additional complication for now I'm avoiding**
 - preload all frames (optional) - this loads all images so browser can cache and reduce delay when loading new frames **(done)**
 - record individual frames to buffer
 - record the actual screen as it appears and store as a special sequence
+- running buffer of previous screen states of depth n (for instance, store only most recent 20 screen states) - then we can skip back ("hiccup") for instance 8 cycles, or we can do things like loop the last 4 screen states
 - pre-made complex effects; for instance, zoom + shift patterns, wiggle patterns, slow fade in and out of opacity, etc.
 - name and save effects or groups of effects
 - delete sequences, states, state_sequences **(done except for state_sequences)**
