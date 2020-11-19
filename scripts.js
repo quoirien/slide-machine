@@ -9,6 +9,8 @@ var state_sequences = {};
 var layers = [];
 var recording = false;
 var buffer = [];
+var screen_buffer = [];
+var temp_screen_buffer = [];
 
 var restore_state = {
   "layers":[],
@@ -20,6 +22,7 @@ var current_state_sequence = -1;
 var state_sequence_rate = 4;
 var state_sequence_position = 0;
 var global_playback_mode = "normal";
+var saved_global_playback_mode = "normal";
 
 class Sequence {
   constructor(name,type="clip") {
@@ -160,7 +163,6 @@ class Layer {
       var len = this.sequence.frames.length;
       var my_mode = this.playback_mode;
       if(this.playback_pattern && this.playback_pattern.length > 0 && my_mode == "normal") {
-        console.log("I have a pattern");
         my_mode = "pattern";
       }
       switch(my_mode) {
@@ -302,14 +304,11 @@ class Layer {
 
   set_sequence(seq,frame=0,seeking=true) {
     var my_index = layers.indexOf(this);
-    console.log("set_sequence called for layer " + my_index);
     if(this.is_linked && seeking) {
-      console.log("layer is linked and we are seeking, so we are moving down one");
       //so here we should recurse down until we reach the layer that is not is_linked (meaning it's the parent layer to the others)
       layers[my_index - 1].set_sequence(seq,layers[my_index - 1].frame_index,true);
       return;
     } else {
-      console.log("we are now at a non-linked layer (or seeking is false), so we will set sequence");
       this.frame_index = frame;
       this.sequence = sequences[seq];
       this.sequence_index = seq;
@@ -317,9 +316,7 @@ class Layer {
       this.dims = [0,0];
       //this.dims = [this.sequence.frames[this.frame_index].dims[0],this.sequence.frames[this.frame_index].dims[1]];
       this.needs_redraw = true;
-      console.log("have set sequence for layer " + my_index);
       if(layers[my_index + 1] && layers[my_index + 1].is_linked) {
-        console.log("layer " + (my_index + 1) + " is linked... so we should be setting same sequence for that now");
         layers[my_index + 1].set_sequence(seq,layers[my_index + 1].frame_index,false);
       }
     }
@@ -327,9 +324,7 @@ class Layer {
 
   delete_layer() {
     if(layers.length > 1) {
-      console.log("# of layers is " + layers.length);
       var my_index = layers.indexOf(this);
-      console.log("going to delete myself, I'm at this index: " + my_index);
       $("#container img").eq(my_index).remove();
 
       $("#layer_selector .control_span").each(function() {
@@ -361,7 +356,6 @@ class Layer {
       //delete layers[my_index];
       layers.splice(my_index,1);
     } else {
-      console.log("theres only one layer so I'm going to init myself");
       $("#container img").attr("src","");
       $("#container img").addClass("hideme");
       this.init();
@@ -371,7 +365,6 @@ class Layer {
   set_property(prop,val) {
     var curr_lay = layers.indexOf(this);
     var to_act_on = my_linked_layers(curr_lay);
-    console.log("I will act on " + to_act_on.length + " layers");
     for(var n in to_act_on) {
       to_act_on[n][prop] = val;
     }
@@ -380,14 +373,11 @@ class Layer {
   set_effect(prop,val) {
 
     var curr_lay = layers.indexOf(this);
-    console.log("Our current layer should be " + curr_lay);
     var to_act_on = my_linked_layers(curr_lay);
     if(prop == "opacity") {
       to_act_on = [layers[curr_lay]];
     }
 
-    console.log("setting effect: " + prop + " " + val);
-    console.log("this should affect " + (to_act_on.length) + " layers");
     //val = $.parseJSON("[" + val + "]");
     var valstring = val;
     val = build_effect_vals(val);
@@ -422,7 +412,6 @@ class Layer {
     val = final_val;
     */
 
-    console.log("trying to set " + prop + " to " + JSON.stringify(val));
 
     for(var x in to_act_on) {
       to_act_on[x]["effect_strings"][prop] = valstring;
@@ -580,12 +569,25 @@ function add_to_key_buffer(char) {
 }
 
 var in_input = false;
-var reserved_keys = [32,37,38,39,40,13,16,80,27,219,221,189,187,190];
+var reserved_keys = [32,37,38,39,40,13,16,80,27,219,221,189,187,190,17];
 var instant_keys = [32,80,219,221,189,187];
 var bad_char_test = RegExp("[^a-z0-9]");
 
 function handle_keypress(key_code,shifted = false) {
   console.log("keypress: " + key_code);
+
+  //very first thing let's do is jump out of input if we press space and shifted
+  //ah - easy way is just to pretend they hit esc
+  if(key_code == 32 && shifted) {
+    key_code = 27;
+  }
+
+  //if it's ctrl we just want to jump to layer selector
+  if(key_code == 17) {
+    $(".control_span").not("#layer_selector .control_span").removeClass("active").removeClass("show");
+    $("#layer_selector .control_span.show").addClass("active").removeClass("show");
+  }
+
   //maybe we should just do this as if not since we don't want to do anything specific in input
   //if(in_input && key_code != 13 && key_code != 27) {
     //don't do anything but if ESC pressed move out of input
@@ -597,10 +599,10 @@ function handle_keypress(key_code,shifted = false) {
       //if it's a space that means we want to clear the shortcut
       var typed_char = (key_code == 32) ? "" : String.fromCharCode(key_code).toLowerCase();
       if(shifted) {
-        console.log("shifted");
         if(!(bad_char_test.test(typed_char)) && (key_code != 32)) {
           add_to_key_buffer(typed_char);
         } else if(key_code == 32) {
+          console.log("pressed space??");
           var my_id = current_active.attr("data-id");
           for(var k in key_shortcuts) {
             console.log("k is " + k);
@@ -612,50 +614,6 @@ function handle_keypress(key_code,shifted = false) {
           }
         }
 
-/*     ============================== changing to multi-key shortcuts =======================
-        var my_id = current_active.attr("data-id");
-        if((typed_char != "") && (typeof key_shortcuts[typed_char] === "undefined")) {
-          for(var x in key_shortcuts) {
-            if(key_shortcuts[x] == my_id) {
-              delete key_shortcuts[x];
-              break;
-            }
-          }
-          key_shortcuts[typed_char] = my_id;
-          re_create_controls();
-        } else if (typed_char == "") {
-          for(var x in key_shortcuts) {
-            if(key_shortcuts[x] == my_id) {
-              delete key_shortcuts[x];
-              break;
-            }
-          }
-          re_create_controls();
-        }
-================================================= */
-
-
-        /* if(typeof key_shortcuts[typed_char] === "undefined") {
-          var my_id = current_active.attr("data-id");
-          set_control_property_by_id(my_id,"key_shortcut",typed_char,controls);
-          console.log("=== well we should have set that shortcut.... ")
-          console.log(JSON.stringify(controls));
-          key_shortcuts = {};
-          build_key_shortcuts(controls);
-          re_create_controls();
-        }
-      }
-      console.log("think typed char is " + typed_char);
-      if(typeof key_shortcuts[typed_char] !== "undefined") {
-        $("#controls .control_span").removeClass("active").removeClass("show");
-        var my_new_active = $(".control_span[data-id=" + key_shortcuts[typed_char] + "]");
-        if(my_new_active.hasClass("has_subs")) {
-          my_new_active = my_new_active.find(".control_span").first();
-        }
-        my_new_active.addClass("active");
-        my_new_active.parents().addClass("show");
-        set_active_per_linked(); */
-
       } else {
         //not shifted, not in reserved keys - so we assume key shortcut
         if(!bad_char_test.test(typed_char)) {
@@ -663,22 +621,8 @@ function handle_keypress(key_code,shifted = false) {
         }
       }
 
-/* ==== old key shortcut way
-      } else if (typeof key_shortcuts[typed_char] !== "undefined") {
-        $("#controls .control_span").removeClass("active").removeClass("show");
-        var my_new_active = $(".control_span[data-id=" + key_shortcuts[typed_char] + "]");
-        if(my_new_active.hasClass("has_subs")) {
-          my_new_active = my_new_active.find(".control_span").first();
-        }
-        my_new_active.addClass("active");
-        my_new_active.parents().addClass("show");
-        set_active_per_linked();
-        set_linked_effect_value();
-      }
-=========================================== */
-
-
     } else { //we are in reserved keys so we want to do one of the preset actions (arrow keys etc)
+      console.log("about to check key codes -- key code is " + key_code);
       switch(key_code) {
         /* 37 left - 39 right - 38 up - 40 down */
         case 190: //.
@@ -702,9 +646,7 @@ function handle_keypress(key_code,shifted = false) {
         break;
         case 37: //left arrow
           if(current_active.attr("data-id") == "mode") {
-            console.log("hmm, global playback mode is " + global_playback_mode);
             if(global_playback_mode == "normal") {
-              console.log("we are trying to move out of mode");
               current_active.removeClass("active").removeClass("show");
               $("#layer_selector .control_span.show").addClass("active").removeClass("show");
             }
@@ -722,8 +664,6 @@ function handle_keypress(key_code,shifted = false) {
             current_active.parent().children(".control_span").last().addClass("active");
           }
           set_linked_effect_value();
-          console.log("current layer: " + current_layer());
-          console.log("sequence is null? " + (layers[current_layer()].sequence == null));
           if(layers[current_layer()].sequence != null) {
             $("#info").html(layers[current_layer()].sequence.name);
           } else {
@@ -738,7 +678,6 @@ function handle_keypress(key_code,shifted = false) {
             current_active.parent().children(".control_span").first().addClass("active");
           }
           set_linked_effect_value();
-          console.log("current layer: " + current_layer());
           if(layers[current_layer()].sequence != null) {
 
             $("#info").html(layers[current_layer()].sequence.name);
@@ -750,7 +689,7 @@ function handle_keypress(key_code,shifted = false) {
           var my_id = current_active.attr("data-id");
           //if we have key buffer if shifted we want to make a shortcut
           //if not shifted we want to *use* a shortcut
-          if(key_buffer.length == 0) {
+          if((key_buffer.length == 0) && shifted) {
             for(var x in key_shortcuts) {
               if(key_shortcuts[x] == my_id) {
                 delete key_shortcuts[x];
@@ -763,6 +702,10 @@ function handle_keypress(key_code,shifted = false) {
           if(key_buffer.length > 0) {
             var keystring = key_buffer.join("");
             if(shifted) {
+              if(typeof my_id === "undefined") {
+                //think it's OK to stop handling this keypress entirely now
+                return;
+              }
               if(typeof key_shortcuts[keystring] === "undefined") {
                 key_shortcuts[keystring] = my_id;
               }
@@ -814,9 +757,7 @@ function handle_keypress(key_code,shifted = false) {
           paused = paused ? false : true;
         break;
         case 27: //esc
-        console.log("esc pressed");
         if(in_input) {
-          console.log("in input");
           //need to reset the value to the linked effect
           var live_input = $(".live").first();
           if(typeof $("#controls .active").attr("data-linked-layer-effect") !== "undefined") {
@@ -832,12 +773,10 @@ function handle_keypress(key_code,shifted = false) {
         }
         break;
         case 219: //
-          console.log("setting loop_points[0] to " + layers[current_layer()].frame_index);
           layers[current_layer()].set_property("loop_points",[layers[current_layer()].frame_index,layers[current_layer()].loop_points[1]]);
           //layers[current_layer()].loop_points[0] = layers[current_layer()].frame_index;
         break;
         case 221: // ]
-          console.log("setting loop_points[1] to " + layers[current_layer()].frame_index);
           layers[current_layer()].set_property("loop_points",[layers[current_layer()].loop_points[0],layers[current_layer()].frame_index]);
           //layers[current_layer()].loop_points[1] = layers[current_layer()].frame_index;
         break;
@@ -849,8 +788,9 @@ function handle_keypress(key_code,shifted = false) {
           }
         break;
         case 32: // space bar
+        alert(in_input);
+          console.log("should have breaked but here I am!");
           if(global_playback_mode == "state_sequence_manual") {
-            console.log("manually advancing state sequence restore_state html is " + restore_state["html"]);
             state_sequence_position ++;
             if(state_sequence_position == state_sequences[current_state_sequence]["states"].length) {
               state_sequence_position = 0;
@@ -887,7 +827,7 @@ function do_export() {
     };
     my_saved["sequences"][n] = my_seq_ob;
   }
-  var save_string = JSON.stringify(my_saved);
+  var save_string = "var saved = " + JSON.stringify(my_saved) + ";";
   save_string = save_string.replace(/"sequences":{/,"\n\n\"sequences\":{").replace(/"screen_sequences":{/,"\n\n\"screen_sequences\":{").replace(/"states":{/,"\n\n\"states\":{").replace(/"state_sequences":{/,"\n\n\"state_sequences\":{").replace(/"master_index":/,"\n\n\"master_index\":").replace(/"screen_sequences":{/,"\n\n\"screen_sequences\":{").replace(/"name":/g,"\n    \"name\":");
 
   download(save_string, "saved.js", "text/javascript");
@@ -968,16 +908,13 @@ function set_linked_effect_value() {
 }
 
 function set_active_per_linked() {
-  console.log("called set_active_per_linked");
   if(typeof $("#controls .active").attr("data-linked-layer-property") !== "undefined") {
     var my_prop = $("#controls .active").attr("data-linked-layer-property");
-    console.log("my_prop: " + my_prop);
     var my_val = layers[current_layer()][my_prop];
     if(typeof my_val === "undefined") {
       my_val = -1;
     }
     if($("#controls_active").hasClass("has_subs")) {
-      console.log("my_val: " + my_val);
       if($("#controls .active").attr("data-value") != my_val) {
         var old_active = $("#controls .active");
         old_active.removeClass("active");
@@ -995,8 +932,6 @@ function current_layer() {
     raw_index = $("#layer_selector .control_span").index($("#layer_selector .active"));
   }
   var len = $("#layer_selector .control_span").length;
-  console.log("raw_index is " + raw_index + " and len is " + len);
-  console.log("going to return " + ((len - 1) - raw_index));
   return (len - 1) - raw_index;
 }
 
@@ -1015,7 +950,6 @@ function find_control_by_id(id,con) {
 }
 
 function XXset_control_property_by_id(id,prop,val,con) {
-  console.log(JSON.stringify(con));
   if (con["id"] == id) {
     con[prop] = val;
     return;
@@ -1030,7 +964,6 @@ function XXset_control_property_by_id(id,prop,val,con) {
 function set_control_property_by_id(id,prop,val,jsonObj) {
     if( jsonObj !== null && typeof jsonObj == "object" ) {
         if(jsonObj["id"] == id) {
-          console.log("FOUND IT");
           jsonObj[prop] = val;
         }
         Object.entries(jsonObj).forEach(([key, value]) => {
@@ -1057,6 +990,8 @@ function do_cycle(force=false) {
   if(paused && !force) {return;}
   now_test = new Date().getTime();
 
+
+
   if(((global_playback_mode == "state_sequence_once") || (global_playback_mode == "state_sequence_loop")) && (state_sequence_rate != parseInt(state_sequence_rate)) && (state_sequences[current_state_sequence]["states"].length > 0)) {
     if(ss_cycle == 0) {
       ss_cycle = now_test;
@@ -1066,11 +1001,8 @@ function do_cycle(force=false) {
       timed_rate = timed_rate * 60;
     }
     timed_rate = timed_rate * 1000;
-    console.log("timed_rate: " + timed_rate);
     if((now_test - ss_cycle) > timed_rate) {
       ss_cycle = now_test;
-      console.log("advancing state -- position is now " + state_sequence_position);
-      console.log("... now its " + state_sequence_position);
       if(state_sequence_position == state_sequences[current_state_sequence]["states"].length) {
         if(global_playback_mode == "state_sequence_once") {
           unload_state();
@@ -1079,27 +1011,68 @@ function do_cycle(force=false) {
           state_sequence_position = 0;
         }
       }
-      console.log("should be loading next state (position " + state_sequence_position + "): " + state_sequences[current_state_sequence]["states"][state_sequence_position]);
       load_state(state_sequences[current_state_sequence]["states"][state_sequence_position]);
       state_sequence_position ++;
     }
   }
 
   if(((now_test - last_cycle) > cycle) || (force)) {
+
+    //for now I think we'll just record the previous screen state
+    if((global_playback_mode != "screen-replay") && (global_playback_mode != "screen-loop")) {
+      screen_buffer.push($("#container").html());
+      if(screen_buffer.length > 100) {
+        screen_buffer.shift();
+      }
+    }
+
+
     last_cycle = now_test;
     cycle_counter ++;
+
+    if(global_playback_mode == "screen-replay" || global_playback_mode == "screen-loop") {
+      //reload the first one by shift
+
+      var next_html = temp_screen_buffer.shift();
+      var working = $("<div/>");
+      working.html(next_html);
+      //adding/removing imgs could cause problems when we return? Oh shouldn't because we should by definition be back where we're supposed to be.
+      while($("#container img").length > working.find("img").length) {
+        $("#container img").last().remove();
+      }
+      while($("#container img").length < working.find("img").length) {
+        $("#container").append("<img/>");
+      }
+      for(var n=0; n< working.find("img").length; n++) {
+        var this_im = working.find("img").eq(n);
+        var targ_im = $("#container img").eq(n);
+
+
+        targ_im.css({"width":this_im.css("width"),"height":this_im.css("height"),"left":this_im.css("left"),"top":this_im.css("top")});
+        var my_src = this_im.attr("src");
+        targ_im.attr("src",my_src);
+      }
+
+      //$("#container").html(next_html);
+      if(global_playback_mode == "screen-loop") {
+        temp_screen_buffer.push(next_html);
+      }
+      if(temp_screen_buffer.length == 0) {
+          //we were returning to saved global_playback_mode but that doesn't really work - we need to think about how all these things go together
+          //maybe we deal with screen replay / screen loop separately
+          global_playback_mode = "normal";
+      }
+      return;
+    }
+
     for(var i in layers) {
       if(((cycle_counter + layers[i]["cycle_offset"]) % layers[i]["frame_delay"]) == 0) {
         layers[i].advance_frame();
       }
     }
 
-    if(global_playback_mode == "state_sequence_loop") {
-      console.log("SSL");
-    }
     if(((global_playback_mode == "state_sequence_once") || (global_playback_mode == "state_sequence_loop")) && (cycle_counter % state_sequence_rate == 0) && (state_sequences[current_state_sequence]["states"].length > 0) && (state_sequence_rate == parseInt(state_sequence_rate))) {
-      console.log("advancing state -- position is now " + state_sequence_position);
-      console.log("... now its " + state_sequence_position);
+
       if(state_sequence_position == state_sequences[current_state_sequence]["states"].length) {
         if(global_playback_mode == "state_sequence_once") {
           unload_state();
@@ -1108,7 +1081,6 @@ function do_cycle(force=false) {
           state_sequence_position = 0;
         }
       }
-      console.log("should be loading next state (position " + state_sequence_position + "): " + state_sequences[current_state_sequence]["states"][state_sequence_position]);
       load_state(state_sequences[current_state_sequence]["states"][state_sequence_position]);
       state_sequence_position ++;
     }
@@ -1183,7 +1155,6 @@ function unload_state() {
   layers = [];
   if(restore_state["layers"].length > 0) {
     //we restore
-    console.log("should be restoring this html: " + restore_state["html"]);
     $("#container").html(restore_state["html"]);
     for(var x in restore_state["layers"]) {
       layers.push(new Layer());
@@ -1210,7 +1181,6 @@ function insert_blank_layer_above_current() {
   for(var i = 0; i < layers.length; i++) {
     $("#layer_selector").prepend("<span data-index=\"" + i + "\" class=\"control_span\">[" + i + "]</span>");
   }
-  console.log("setting show to " + (current_index_raw + 1));
   $("#layer_selector .control_span").eq(current_index_raw + 1).addClass("show");
 }
 
@@ -1223,7 +1193,6 @@ function insert_blank_layer_below_current() {
   for(var i = 0; i < layers.length; i++) {
     $("#layer_selector").prepend("<span data-index=\"" + i + "\" class=\"control_span\">[" + i + "]</span>");
   }
-  console.log("setting show to " + (current_index_raw));
   $("#layer_selector .control_span").eq(current_index_raw).addClass("show");
 }
 
@@ -1260,7 +1229,6 @@ var beat_interval = 10;
 var beat_timeout = 3000;
 
 function set_beat() {
-  console.log("setting beat");
   var now_test = new Date().getTime();
 
   if(last_beat == 0) {
@@ -1293,7 +1261,6 @@ function next_master_index() {
 
 $(document).ready(function() {
 
-  console.log("document load restore_state html is " + restore_state["html"]);
 
   if(!$.isEmptyObject(saved["key_shortcuts"])) {
     key_shortcuts = saved["key_shortcuts"];
@@ -1303,8 +1270,6 @@ $(document).ready(function() {
     master_index = saved["master_index"];
   }
 
-  console.log("trying to restore states:");
-  console.log(JSON.stringify(saved["states"]));
   states = saved["states"];
 
   //doing this for backward compatibility before we had complicated strings to set effects
